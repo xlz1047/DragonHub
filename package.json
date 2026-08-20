@@ -1,0 +1,21 @@
+{
+  "name": "dragonhub-drexel",
+  "version": "1.0.0",
+  "description": "DrexelHub - Drexel University Campus Student Network",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^3.0.3",
+    "express": "^4.21.2",
+    "express-session": "^1.19.0",
+    "multer": "^2.2.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

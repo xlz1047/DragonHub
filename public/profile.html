@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile & Dragon ID | DrexelHub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="grid-layout">
+
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><span>🎓</span> Drexel Student Profile</h3>
+              <span class="stat-pill pill-verified">🛡️ @drexel.edu Verified</span>
+            </div>
+
+            <form id="profile-form">
+              <div class="profile-header-row">
+                <img id="profile-avatar" class="avatar-md profile-avatar-lg" src="/assets/test_profile1.png" alt="Avatar">
+                <div>
+                  <h2 id="profile-name-display" class="profile-name">Alex Vance</h2>
+                  <p id="profile-email-display" class="profile-email">av942@drexel.edu</p>
+                </div>
+              </div>
+
+              <div class="form-row-2col">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" id="profile-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Major & College</label>
+                  <input type="text" id="profile-major" class="form-input" required>
+                </div>
+              </div>
+
+              <div class="form-row-2col">
+                <div class="form-group">
+                  <label class="form-label">Class Year</label>
+                  <select id="profile-year" class="form-select">
+                    <option value="Freshman">Freshman</option>
+                    <option value="Sophomore">Sophomore</option>
+                    <option value="Pre-Junior">Pre-Junior</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Graduate">Graduate</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Co-op / Employer</label>
+                  <input type="text" id="profile-coop" class="form-input" placeholder="e.g. SIG, Comcast, Penn Med">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Campus Bio</label>
+                <textarea id="profile-bio" class="form-textarea" rows="3" placeholder="Tell fellow Dragons about your interests, favorite food trucks, or study spots..."></textarea>
+              </div>
+
+              <div class="form-actions-end">
+                <button type="submit" class="btn btn-gold">Save Profile Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div>
+          <div class="card dragon-card">
+            <div class="dragon-card-top">
+              <div class="dragon-card-label">DREXEL UNIVERSITY DRAGON CARD</div>
+              <span class="dragon-card-icon">🐉</span>
+            </div>
+            <div class="dragon-card-id-row">
+              <img id="dragoncard-avatar" class="avatar-md dragon-card-avatar" src="/assets/test_profile1.png" alt="Avatar">
+              <div>
+                <div id="dragoncard-name" class="dragon-card-name">Alex Vance</div>
+                <div id="dragoncard-id" class="dragon-card-id">ID: 14892019 • STUDENT</div>
+              </div>
+            </div>
+            <div class="dragon-card-footer">
+              <div>Points: <strong class="dragon-card-points header-user-points">240 pts</strong></div>
+              <div>Status: <strong class="dragon-card-status">Active • Verified</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><span>👥</span> Switch Demo Drexel Account</h3>
+            </div>
+            <div class="switch-account-list">
+              <button type="button" class="btn btn-outline switch-account-btn" data-switch-user="usr_alex">
+                🐉 <strong>Alex Vance</strong> (Computer Science Senior)
+              </button>
+              <button type="button" class="btn btn-outline switch-account-btn" data-switch-user="usr_samantha">
+                🔬 <strong>Samantha Chen</strong> (Biomedical Engineering)
+              </button>
+              <button type="button" class="btn btn-outline switch-account-btn" data-switch-user="usr_marcus">
+                📊 <strong>Marcus Johnson</strong> (Finance & Analytics)
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/ui/header.js"></script>
+  <script src="/js/ui/auth.js"></script>
+  <script src="/js/ui/modals.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
