@@ -1,0 +1,125 @@
+.category-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cat-btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--slate-200);
+  background-color: white;
+  color: var(--slate-600);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.cat-btn:hover {
+  background-color: var(--slate-100);
+  color: var(--drexel-blue);
+}
+
+.cat-btn.active {
+  background-color: var(--drexel-blue);
+  color: var(--drexel-gold);
+  border-color: var(--drexel-blue);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--slate-700);
+  margin-bottom: 0.35rem;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--slate-300);
+  font-size: 0.8rem;
+  outline: none;
+  background-color: white;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--drexel-blue);
+  box-shadow: 0 0 0 3px rgba(7, 41, 77, 0.1);
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.form-actions-end {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.poll-options-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-xl);
+  max-width: 520px;
+  width: 100%;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--slate-100);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--slate-400);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: var(--slate-700);
+}
