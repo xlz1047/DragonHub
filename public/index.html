@@ -1,94 +1,753 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DrexelHub | University City Verified Campus Network</title>
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/header.css">
-  <link rel="stylesheet" href="/css/feed.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DragonHub — Drexel University Student Network</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom App Stylesheet -->
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
-<body>
 
-  <div id="site-header"></div>
-  <div id="site-nav"></div>
+<body
+  class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-[#FFC600] selection:text-[#07294D] min-h-screen flex flex-col">
 
-  <main class="main-content">
-    <div class="container">
+  <!-- ================= AUTH PAGE SCREEN (LOGIN / REGISTER) ================= -->
+  <div id="auth-screen" class="hidden fixed inset-0 z-50 bg-slate-900 text-slate-100 overflow-y-auto">
+    <!-- Background Accents -->
+    <div
+      class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-[#07294D] via-[#0d3b6c]/40 to-transparent blur-3xl opacity-60 pointer-events-none">
+    </div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-[#FFC600]/10 rounded-full blur-3xl pointer-events-none">
+    </div>
 
-      <div class="card hero-banner">
-        <div class="hero-banner-inner">
-          <div class="hero-banner-tag">
-            <span>🐉</span> Welcome to DrexelHub
+    <header class="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10 relative">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#FFC600] to-[#FFE066] text-[#07294D] font-black flex items-center justify-center text-xl shadow-lg border border-amber-300">
+          🐉
+        </div>
+        <div>
+          <span class="font-extrabold text-xl text-white tracking-tight">
+            Dragon<span class="text-[#FFC600]">Hub</span>
+          </span>
+          <span
+            class="ml-2 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#FFC600]/20 text-[#FFC600] border border-[#FFC600]/30">
+            Drexel
+          </span>
+        </div>
+      </div>
+
+      <button onclick="window.AuthUI.closeScreen()"
+        class="text-xs text-blue-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 rounded-xl transition-all">
+        Browse as Guest →
+      </button>
+    </header>
+
+    <main
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 flex items-center justify-center z-10 relative w-full">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <!-- Left: Value Prop & Demo Preset Buttons -->
+        <div class="lg:col-span-7 space-y-6 text-left">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FFC600]/15 text-[#FFC600] border border-[#FFC600]/30 text-xs font-bold">
+            <i data-lucide="shield-check" class="w-4 h-4 text-[#FFC600]"></i>
+            <span>@drexel.edu Verified Dragon Community</span>
           </div>
-          <h1 class="hero-banner-title">
-            The Complete Campus Network for Drexel Dragons
+
+          <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            University City’s Hub for <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC600] via-amber-300 to-yellow-200">Drexel
+              Dragons</span>
           </h1>
-          <p class="hero-banner-desc">
-            Connect with verified @drexel.edu peers, check live Lancaster Walk food truck lines, trade course textbooks, explore University City spots, and earn DREAMER points.
+
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+            Connect with fellow Drexel students across campus. Discover Lancaster Walk food trucks, buy & sell course
+            textbooks, vote on Drexel campus polls, and map out campus spots around Mario the Dragon.
           </p>
-          <div class="hero-banner-actions">
-            <a href="/feed.html" class="btn btn-gold">
-              <span>💬</span> Join Campus Feed
-            </a>
-            <a href="/discover.html" class="btn btn-outline hero-banner-btn-outline">
-              <span>🍔</span> Lancaster Walk Food Trucks
-            </a>
-            <a href="/map.html" class="btn btn-outline hero-banner-btn-outline">
-              <span>🗺️</span> Open Campus Map
-            </a>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+              <div class="text-[#FFC600] font-bold text-lg mb-1">🌮 Food Trucks</div>
+              <div class="text-xs text-slate-300">Cucina Zapata, Halal Carts & student reviews</div>
+            </div>
+
+            <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+              <div class="text-emerald-400 font-bold text-lg mb-1">📚 Marketplace</div>
+              <div class="text-xs text-slate-300">Peer-to-peer textbook & tech exchange</div>
+            </div>
+
+            <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
+              <div class="text-amber-400 font-bold text-lg mb-1">🏆 DREAMER Pts</div>
+              <div class="text-xs text-slate-300">Earn badges & unlock UCity local perks</div>
+            </div>
+          </div>
+
+          <!-- Quick Demo Login Presets -->
+          <div class="pt-4 space-y-3 bg-[#07294D]/60 border border-blue-500/20 p-5 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#FFC600] uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> Quick Demo Dragon Login (Click to test):
+              </span>
+              <span class="text-[10px] text-blue-300">Instant Access</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <button onclick="window.AuthUI.demoLogin('alex')"
+                class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/90 border border-blue-400/20 text-left transition-all group">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+                  class="w-8 h-8 rounded-full object-cover ring-2 ring-[#FFC600] shrink-0" />
+                <div class="overflow-hidden">
+                  <div class="text-xs font-bold text-white group-hover:text-[#FFC600] transition-colors truncate">Alex
+                    Vance (CS '27)</div>
+                  <div class="text-[10px] text-slate-400 truncate">Verified Dragon</div>
+                </div>
+              </button>
+
+              <button onclick="window.AuthUI.demoLogin('samantha')"
+                class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/90 border border-blue-400/20 text-left transition-all group">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200"
+                  class="w-8 h-8 rounded-full object-cover ring-2 ring-[#FFC600] shrink-0" />
+                <div class="overflow-hidden">
+                  <div class="text-xs font-bold text-white group-hover:text-[#FFC600] transition-colors truncate">
+                    Samantha (LeBow '25)</div>
+                  <div class="text-[10px] text-slate-400 truncate">Marketplace Seller</div>
+                </div>
+              </button>
+
+              <button onclick="window.AuthUI.demoLogin('marcus')"
+                class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/90 border border-blue-400/20 text-left transition-all group">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+                  class="w-8 h-8 rounded-full object-cover ring-2 ring-[#FFC600] shrink-0" />
+                <div class="overflow-hidden">
+                  <div class="text-xs font-bold text-white group-hover:text-[#FFC600] transition-colors truncate">Marcus
+                    Miller (Eng '26)</div>
+                  <div class="text-[10px] text-slate-400 truncate">Active Foodie</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Auth Form Card -->
+        <div class="lg:col-span-5 w-full max-w-md mx-auto">
+          <div class="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200">
+            <div class="flex rounded-xl bg-slate-100 p-1 mb-6 border border-slate-200">
+              <button id="auth-tab-signin" type="button" onclick="window.AuthUI.setAuthMode('login')"
+                class="flex-1 py-2 text-xs font-bold rounded-lg bg-[#07294D] text-white">
+                Sign In
+              </button>
+              <button id="auth-tab-register" type="button" onclick="window.AuthUI.setAuthMode('register')"
+                class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600">
+                Create Account
+              </button>
+            </div>
+
+            <h2 id="auth-card-title" class="text-xl font-bold text-[#07294D]">Welcome Back, Dragon</h2>
+            <p id="auth-card-sub" class="text-xs text-slate-500 mt-1 mb-4">Sign in with your Drexel credentials or Quick
+              Demo accounts.</p>
+
+            <div id="auth-error"
+              class="hidden mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs"></div>
+
+            <form id="auth-form" onsubmit="window.AuthUI.handleAuthSubmit(event)" class="space-y-4">
+              <div id="register-fields" class="hidden space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+                  <input id="auth-name" type="text" placeholder="e.g. Alex Vance"
+                    class="w-full text-xs sm:text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#07294D]" />
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Major / College</label>
+                    <select id="auth-major"
+                      class="w-full text-xs sm:text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#07294D]">
+                      <option value="Computer Science (CCI)">CS / Computing</option>
+                      <option value="Business Admin (LeBow)">LeBow Business</option>
+                      <option value="Mechanical Engineering">Engineering</option>
+                      <option value="Biomedical Engineering">Biomedical</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Grad Year</label>
+                    <select id="auth-grad"
+                      class="w-full text-xs sm:text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#07294D]">
+                      <option value="2025">2025 (Senior)</option>
+                      <option value="2026">2026 (Junior)</option>
+                      <option value="2027" selected>2027 (Pre-Junior)</option>
+                      <option value="2028">2028 (Sophomore)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Drexel Email</label>
+                <input id="auth-email" type="email" placeholder="username@drexel.edu" required
+                  class="w-full text-xs sm:text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#07294D]" />
+                <p class="text-[10px] text-slate-400 mt-1">Must end with @drexel.edu</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                <input id="auth-password" type="password" placeholder="••••••••" required
+                  class="w-full text-xs sm:text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#07294D]" />
+              </div>
+
+              <button type="submit"
+                class="w-full py-3 rounded-xl bg-[#07294D] text-[#FFC600] font-black text-sm hover:bg-[#0a3869] transition-all shadow-md flex items-center justify-center gap-2">
+                <span id="auth-submit-text">Sign In to DragonHub</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 text-center">
+              <button onclick="window.AuthUI.closeScreen()"
+                class="text-xs text-slate-500 hover:text-[#07294D] font-medium">
+                Continue as Guest Visitor →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="w-full py-4 text-center text-xs text-slate-500 border-t border-slate-800 bg-slate-950/60">
+      <p>© 2026 DragonHub • Drexel University Community • University City, Philadelphia</p>
+    </footer>
+  </div>
+
+  <!-- ================= APP HEADER ================= -->
+  <header class="bg-[#07294D] text-white border-b border-blue-900 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div
+          class="w-9 h-9 rounded-xl bg-[#FFC600] text-[#07294D] font-black flex items-center justify-center text-lg shadow-sm">
+          🐉
+        </div>
+        <div class="hidden xs:block">
+          <div class="flex items-center gap-1.5">
+            <span class="font-black text-lg text-white tracking-tight">Dragon<span
+                class="text-[#FFC600]">Hub</span></span>
+            <span
+              class="text-[10px] font-extrabold bg-[#FFC600]/20 text-[#FFC600] px-2 py-0.5 rounded-full border border-[#FFC600]/30">Drexel</span>
+          </div>
+          <p class="text-[10px] text-blue-200 leading-none">University City Student Network</p>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-md mx-2">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-blue-300"></i>
+          <input id="global-search" type="text" placeholder="Search food trucks, textbooks, polls, Mario dragon..."
+            oninput="window.HeaderUI.handleSearch(this.value)"
+            class="w-full bg-[#0d3b6c] text-xs text-white placeholder-blue-300 pl-9 pr-4 py-2 rounded-full border border-blue-400/20 focus:outline-none focus:border-[#FFC600]" />
+        </div>
+      </div>
+
+      <!-- Right Controls: Weather, Notifications, Profile -->
+      <div class="flex items-center gap-2 sm:gap-3">
+
+        <!-- Weather Widget -->
+        <div id="weather-widget"
+          class="hidden md:flex items-center gap-1.5 bg-[#0d3b6c] px-3 py-1.5 rounded-full border border-blue-400/20 text-xs">
+          <i data-lucide="sun" class="w-4 h-4 text-[#FFC600]"></i>
+          <span id="weather-temp" class="font-bold">74°F</span>
+          <span class="text-blue-200 text-[11px]">UCity</span>
+        </div>
+
+        <!-- Notifications -->
+        <div class="relative">
+          <button id="btn-notif" onclick="window.HeaderUI.toggleNotifDropdown()"
+            class="p-2 rounded-full bg-[#0d3b6c] hover:bg-blue-800 text-blue-200 border border-blue-400/20 relative">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span id="notif-badge" class="w-2 h-2 rounded-full bg-[#FFC600] absolute top-1 right-1"></span>
+          </button>
+
+          <div id="notif-dropdown"
+            class="hidden absolute right-0 mt-2 w-72 bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 p-3 z-50">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <span class="font-bold text-xs text-[#07294D]">Drexel Notifications</span>
+              <button onclick="window.HeaderUI.markNotifsRead()"
+                class="text-[10px] text-blue-600 font-semibold hover:underline">Mark read</button>
+            </div>
+            <div id="notif-list" class="space-y-2 py-2 text-xs"></div>
+          </div>
+        </div>
+
+        <!-- User Profile Avatar & Sign Out -->
+        <div class="flex items-center gap-1 bg-[#0d3b6c] p-1 rounded-xl border border-blue-400/20">
+          <button onclick="window.ModalsUI.openProfile()"
+            class="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-blue-800 text-white">
+            <img id="header-avatar"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+              class="w-7 h-7 rounded-full object-cover border border-[#FFC600]" />
+            <div class="text-left hidden sm:block">
+              <div id="header-name" class="text-xs font-bold leading-tight">Alex Vance</div>
+              <div id="header-major" class="text-[10px] text-blue-200">CS (CCI) '27</div>
+            </div>
+          </button>
+          <button onclick="window.AuthUI.openScreen()" title="Sign Out / Switch Account"
+            class="p-1.5 rounded-lg text-blue-200 hover:text-white hover:bg-rose-600/30">
+            <i data-lucide="log-out" class="w-4 h-4 text-blue-300"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= TAB NAVIGATION ================= -->
+  <nav class="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between overflow-x-auto no-scrollbar space-x-1 py-2">
+
+        <button onclick="window.DragonHubApp.switchTab('feed')" id="tab-btn-feed"
+          class="active-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border border-transparent transition-all shrink-0">
+          <i data-lucide="message-square-text" class="w-4 h-4"></i>
+          <span>Campus Feed</span>
+        </button>
+
+        <button onclick="window.DragonHubApp.switchTab('eats')" id="tab-btn-eats"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#07294D] border border-transparent transition-all shrink-0">
+          <i data-lucide="utensils" class="w-4 h-4"></i>
+          <span>Discover Eats</span>
+          <span class="text-[9px] bg-amber-100 text-amber-800 font-extrabold px-1.5 py-0.5 rounded-full">Food
+            Trucks</span>
+        </button>
+
+        <button onclick="window.DragonHubApp.switchTab('marketplace')" id="tab-btn-marketplace"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#07294D] border border-transparent transition-all shrink-0">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span>Marketplace</span>
+        </button>
+
+        <button onclick="window.DragonHubApp.switchTab('map')" id="tab-btn-map"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#07294D] border border-transparent transition-all shrink-0">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+          <span>Campus Map</span>
+        </button>
+
+        <button onclick="window.DragonHubApp.switchTab('achievements')" id="tab-btn-achievements"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#07294D] border border-transparent transition-all shrink-0">
+          <i data-lucide="trophy" class="w-4 h-4"></i>
+          <span>Achievements</span>
+          <span id="nav-points-badge"
+            class="text-[10px] bg-[#FFC600] text-[#07294D] font-black px-2 py-0.5 rounded-full">240 Pts</span>
+        </button>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= MAIN CONTENT PANES ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+
+    <!-- 1. CAMPUS FEED TAB -->
+    <section id="pane-feed" class="space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left 8 Cols: Create Post & Posts Stream -->
+        <div class="lg:col-span-8 space-y-6">
+
+          <!-- Create Post Card -->
+          <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200">
+            <div class="flex items-center gap-3">
+              <img id="create-post-avatar"
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+                class="w-10 h-10 rounded-full object-cover border border-[#FFC600]" />
+              <button onclick="window.ModalsUI.openCreatePost()"
+                class="flex-1 text-left bg-slate-100 hover:bg-slate-200/80 text-slate-500 text-xs px-4 py-3 rounded-xl border border-slate-200 transition-colors">
+                What’s happening on Drexel campus, co-op, or Lancaster Walk?
+              </button>
+              <button onclick="window.ModalsUI.openCreatePost()"
+                class="p-3 bg-[#07294D] text-[#FFC600] rounded-xl hover:bg-[#0a3869] transition-all">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Category Filters -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1">
+            <button onclick="window.FeedUI.filterCategory('All', this)"
+              class="feed-cat-btn px-3.5 py-1.5 rounded-full bg-[#07294D] text-[#FFC600] font-bold text-xs">All
+              Topics</button>
+            <button onclick="window.FeedUI.filterCategory('Food Trucks & Dining', this)"
+              class="feed-cat-btn px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs">🌮
+              Food Trucks</button>
+            <button onclick="window.FeedUI.filterCategory('Marketplace & Books', this)"
+              class="feed-cat-btn px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs">📚
+              Marketplace</button>
+            <button onclick="window.FeedUI.filterCategory('Study Groups & Classes', this)"
+              class="feed-cat-btn px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs">📖
+              Study Groups</button>
+          </div>
+
+          <!-- Posts Container -->
+          <div id="posts-container" class="space-y-4"></div>
+        </div>
+
+        <!-- Right 4 Cols: Polls & Campus Widgets -->
+        <div class="lg:col-span-4 space-y-6">
+
+          <!-- Drexel Student Poll Widget -->
+          <div id="poll-card" class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200 space-y-4">
+            <div class="flex items-center gap-2">
+              <i data-lucide="bar-chart-3" class="w-5 h-5 text-[#07294D]"></i>
+              <h3 class="font-bold text-slate-900 text-sm">Official Drexel Dragon Poll</h3>
+            </div>
+            <div id="poll-content"></div>
+          </div>
+
+          <!-- Campus Quick Info -->
+          <div
+            class="bg-gradient-to-br from-[#07294D] to-[#0a3869] text-white rounded-2xl p-5 shadow-xs border border-blue-900 space-y-3">
+            <div class="flex items-center gap-2 text-[#FFC600] font-bold text-xs uppercase tracking-wider">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Drexel Dragon Community Rules
+            </div>
+            <p class="text-xs text-blue-100 leading-relaxed">
+              DragonHub is exclusively built for Drexel University students. Post co-op tips, food truck wait times,
+              textbook sales, and study group alerts!
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DISCOVER EATS TAB -->
+    <section id="pane-eats" class="hidden space-y-6">
+      <div
+        class="bg-gradient-to-r from-[#07294D] via-[#0a3869] to-[#07294D] text-white rounded-2xl p-6 sm:p-8 shadow-md border border-blue-900">
+        <div class="max-w-3xl space-y-3">
+          <div
+            class="inline-flex items-center gap-1.5 bg-[#FFC600]/20 text-[#FFC600] font-extrabold text-xs px-3 py-1 rounded-full border border-[#FFC600]/30">
+            🌮 Lancaster Walk & Powelton Food Truck Guide
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black">University City Food Trucks & Eats</h2>
+          <p class="text-xs sm:text-sm text-blue-100">
+            Real student reviews, live wait times, discount codes for @drexel.edu Dragons.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 overflow-x-auto">
+        <button onclick="window.EatsUI.filterCategory('All', this)"
+          class="eats-cat-btn px-4 py-2 rounded-xl bg-[#07294D] text-[#FFC600] font-bold text-xs">All Campus
+          Eats</button>
+        <button onclick="window.EatsUI.filterCategory('Trucks', this)"
+          class="eats-cat-btn px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs">🚚
+          Food Trucks Only</button>
+        <button onclick="window.EatsUI.filterCategory('Top', this)"
+          class="eats-cat-btn px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs">⭐
+          Top Rated (4.8+)</button>
+      </div>
+
+      <div id="vendors-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- 3. MARKETPLACE TAB -->
+    <section id="pane-marketplace" class="hidden space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+        <div>
+          <h2 class="text-lg font-bold text-[#07294D]">Drexel Student Marketplace</h2>
+          <p class="text-xs text-slate-500">Buy and sell textbooks, dorm gear, graphing calculators, and co-op items
+            safely.</p>
+        </div>
+        <button onclick="window.ModalsUI.openCreateListing()"
+          class="px-4 py-2.5 rounded-xl bg-[#07294D] text-[#FFC600] font-bold text-xs hover:bg-[#0a3869] flex items-center justify-center gap-2 shadow-xs">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Post New Listing
+        </button>
+      </div>
+
+      <div id="marketplace-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- 4. CAMPUS MAP TAB -->
+    <section id="pane-map" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-xs border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-[#07294D]">Drexel Campus Map & Check-In Spots</h2>
+            <p class="text-xs text-slate-500">Check in at Mario the Dragon Statue, LeBow, or Hagerty Library to earn
+              DREAMER points!</p>
+          </div>
+          <div class="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1.5 rounded-full border border-amber-200">
+            ⚡ Earn 30-50 Pts per check-in
+          </div>
+        </div>
+
+        <div id="landmarks-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- 5. ACHIEVEMENTS TAB -->
+    <section id="pane-achievements" class="hidden space-y-6">
+      <!-- Level Banner -->
+      <div
+        class="bg-gradient-to-r from-[#07294D] via-[#0a3869] to-[#07294D] text-white rounded-2xl p-6 sm:p-8 shadow-md border border-blue-900 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <img id="achieve-avatar"
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+            class="w-16 h-16 rounded-full object-cover ring-4 ring-[#FFC600]" />
+          <div>
+            <h2 id="achieve-name" class="text-xl sm:text-2xl font-black">Alex Vance</h2>
+            <p id="achieve-major" class="text-xs text-blue-200">Computer Science (CCI) • Class of 2027</p>
+            <div
+              class="inline-flex items-center gap-1.5 mt-2 bg-[#FFC600]/20 text-[#FFC600] font-bold text-xs px-3 py-1 rounded-full border border-[#FFC600]/30">
+              <i data-lucide="award" class="w-3.5 h-3.5"></i> Tier 2 Gold Dragon Status
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-3 gap-3 bg-[#0d3b6c]/80 p-4 rounded-xl border border-blue-400/20 text-center w-full md:w-auto">
+          <div>
+            <div id="achieve-points" class="text-xl font-black text-[#FFC600]">240</div>
+            <div class="text-[10px] text-blue-200 uppercase font-semibold">DREAMER Pts</div>
+          </div>
+          <div>
+            <div id="achieve-streak" class="text-xl font-black text-orange-400">5d</div>
+            <div class="text-[10px] text-blue-200 uppercase font-semibold">Active Streak</div>
+          </div>
+          <div>
+            <div id="achieve-badges-count" class="text-xl font-black text-emerald-400">3/4</div>
+            <div class="text-[10px] text-blue-200 uppercase font-semibold">Badges</div>
           </div>
         </div>
       </div>
 
-      <div class="grid-3-col feature-tiles">
-        <a href="/feed.html" class="card feature-tile">
-          <div class="feature-tile-icon">💬</div>
-          <h3 class="feature-tile-title">Campus Feed & Voices</h3>
-          <p class="feature-tile-desc">Real-time discussions, co-op interview tips, study groups & campus news.</p>
-        </a>
-
-        <a href="/discover.html" class="card feature-tile">
-          <div class="feature-tile-icon">🍔</div>
-          <h3 class="feature-tile-title">Lancaster Walk Eats</h3>
-          <p class="feature-tile-desc">Live food truck wait times, popular menu favorites, and +25 pt check-ins.</p>
-        </a>
-
-        <a href="/marketplace.html" class="card feature-tile">
-          <div class="feature-tile-icon">🛍️</div>
-          <h3 class="feature-tile-title">Dragon Marketplace</h3>
-          <p class="feature-tile-desc">Safely buy and sell course textbooks, graphing calculators, and dorm gear.</p>
-        </a>
-
-        <a href="/map.html" class="card feature-tile">
-          <div class="feature-tile-icon">🗺️</div>
-          <h3 class="feature-tile-title">Campus Map (Leaflet)</h3>
-          <p class="feature-tile-desc">Interactive OpenStreetMap of Hagerty Library, CCI, LeBow, DAC, and trucks.</p>
-        </a>
-
-        <a href="/polls.html" class="card feature-tile">
-          <div class="feature-tile-icon">📊</div>
-          <h3 class="feature-tile-title">Dragon Polls</h3>
-          <p class="feature-tile-desc">Vote on campus topics to earn +10 DREAMER points and create polls.</p>
-        </a>
-
-        <a href="/achievements.html" class="card feature-tile">
-          <div class="feature-tile-icon">🏆</div>
-          <h3 class="feature-tile-title">DREAMER Badges</h3>
-          <p class="feature-tile-desc">Track your points, check-in streaks, campus rank, and Drexel achievements.</p>
-        </a>
+      <!-- Badges Grid -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-slate-900 text-sm">DREAMER Campus Badges</h3>
+        <div id="badges-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
 
-    </div>
+      <!-- Partner Discounts -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 space-y-4">
+        <h3 class="font-bold text-slate-900 text-sm">University City Local Partner Perks</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border bg-amber-50/70 border-amber-200 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-xs text-slate-900">10% Off Halal Gyro Cart Combo</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Ready to
+                Claim</span>
+            </div>
+            <p class="text-xs text-slate-600">Famous New York Halal Cart (33rd & Market)</p>
+            <p
+              class="text-[10px] font-mono font-bold text-[#07294D] bg-white px-2 py-1 rounded inline-block border border-amber-300">
+              Code: DRAGON10HALAL</p>
+          </div>
+
+          <div class="p-4 rounded-xl border bg-amber-50/70 border-amber-200 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-xs text-slate-900">Free Thai Iced Tea with Tacos</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Ready to
+                Claim</span>
+            </div>
+            <p class="text-xs text-slate-600">Cucina Zapata (31st & Ludlow)</p>
+            <p
+              class="text-[10px] font-mono font-bold text-[#07294D] bg-white px-2 py-1 rounded inline-block border border-amber-300">
+              Code: THAIZAPATA2026</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script src="/js/api.js"></script>
+  <!-- ================= MODALS ================= -->
+
+  <!-- PROFILE MODAL -->
+  <div id="modal-profile"
+    class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-bold text-base text-[#07294D]">Edit Drexel Dragon Profile</h3>
+        <button onclick="window.ModalsUI.closeProfile()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x"
+            class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="window.ModalsUI.handleProfileSave(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Full Name</label>
+          <input id="edit-name" type="text"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Major / Department</label>
+          <input id="edit-major" type="text"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Graduation Year</label>
+          <input id="edit-grad" type="text"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Bio</label>
+          <textarea id="edit-bio" rows="2"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex justify-between items-center pt-3 border-t border-slate-100">
+          <button type="button" onclick="window.AuthUI.openScreen()"
+            class="px-3 py-2 rounded-xl bg-rose-50 text-rose-700 text-xs font-bold hover:bg-rose-100">Sign Out</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="window.ModalsUI.closeProfile()"
+              class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600">Cancel</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-[#07294D] text-[#FFC600] font-bold">Save
+              Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE POST MODAL -->
+  <div id="modal-create-post"
+    class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-bold text-base text-[#07294D]">Create Campus Post</h3>
+        <button onclick="window.ModalsUI.closeCreatePost()" class="text-slate-400 hover:text-slate-600"><i
+            data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="window.ModalsUI.handlePostCreate(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Post Title</label>
+          <input id="post-title" type="text" placeholder="e.g. Food truck lines on 33rd St..."
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Category</label>
+            <select id="post-category" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none">
+              <option value="Food Trucks & Dining">Food Trucks & Dining</option>
+              <option value="Marketplace & Books">Marketplace & Books</option>
+              <option value="Study Groups & Classes">Study Groups & Classes</option>
+              <option value="Co-op & Career">Co-op & Career</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Campus Location Tag</label>
+            <input id="post-location" type="text" placeholder="e.g. Lancaster Walk"
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Content</label>
+          <textarea id="post-content" rows="3" placeholder="Share details with Drexel dragons..."
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="window.ModalsUI.closeCreatePost()"
+            class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#07294D] text-[#FFC600] font-bold">Publish Post (+15
+            Pts)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE LISTING MODAL -->
+  <div id="modal-create-listing"
+    class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 class="font-bold text-base text-[#07294D]">Post Marketplace Item</h3>
+        <button onclick="window.ModalsUI.closeCreateListing()" class="text-slate-400 hover:text-slate-600"><i
+            data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="window.ModalsUI.handleListingCreate(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Item Title</label>
+          <input id="list-title" type="text" placeholder="e.g. TI-84 Plus Calculator"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Price ($)</label>
+            <input id="list-price" type="number" placeholder="25"
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Category</label>
+            <select id="list-category" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none">
+              <option value="Textbooks & Notes">Textbooks & Notes</option>
+              <option value="Electronics & Tech">Electronics & Tech</option>
+              <option value="Apparel & Gear">Apparel & Gear</option>
+              <option value="Dorm & Sublets">Dorm & Sublets</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Condition</label>
+            <select id="list-condition" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none">
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Description</label>
+          <textarea id="list-desc" rows="2" placeholder="Details about pickup spot (e.g. Hagerty Library)..."
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none" required></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="window.ModalsUI.closeCreateListing()"
+            class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#07294D] text-[#FFC600] font-bold">Post Listing (+25
+            Pts)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE REVIEW MODAL -->
+  <div id="modal-reviews" 
+  class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h3 id = "modal-reviews-title" class="font-bold text-base text-[#07294D]"></h3>
+        <button onclick="document.getElementById('modal-reviews').classList.add('hidden')">X</button>
+       </div>
+       <div id ="modal-reviews-list" class="space-y-2 text-xs"></div>
+       <textarea id="user-review" placeholder="Write a review" class="w-full border rounded-xl p-2 text-xs"></textarea>
+       <button id="submitted-review" class="px-4 py-2 bg-[#07294D] text-[#FFC600] font-bold rounded-xl text-xs">Submit Review</button>
+    </div>
+    </div> 
+
+
+  <!-- Ordered Script Loading -->
   <script src="/js/state.js"></script>
-  <script src="/js/ui/layout.js"></script>
-  <script src="/js/ui/header.js"></script>
-  <script src="/js/ui/notifications.js"></script>
+  <script src="/js/api.js"></script>
   <script src="/js/ui/auth.js"></script>
+  <script src="/js/ui/header.js"></script>
+  <script src="/js/ui/feed.js"></script>
+  <script src="/js/ui/eats.js"></script>
+  <script src="/js/ui/marketplace.js"></script>
+  <script src="/js/ui/map.js"></script>
+  <script src="/js/ui/achievements.js"></script>
   <script src="/js/ui/modals.js"></script>
   <script src="/js/app.js"></script>
 </body>
+
 </html>
