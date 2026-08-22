@@ -1,0 +1,154 @@
+.achievements-banner {
+  background: linear-gradient(135deg, #07294D 0%, #0c2b50 100%);
+  color: white;
+  border: none;
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.achievements-empty {
+  text-align: center;
+  color: var(--slate-500);
+  padding: 2rem;
+}
+
+.achievements-banner-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.achievements-banner-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--drexel-gold);
+  margin-bottom: 0.25rem;
+}
+
+.achievements-banner-desc {
+  font-size: 0.8rem;
+  color: #bfdbfe;
+}
+
+.achievements-points-box {
+  text-align: right;
+}
+
+.achievements-points-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--drexel-gold);
+}
+
+.achievements-points-label {
+  font-size: 0.7rem;
+  color: #93c5fd;
+}
+
+.badge-card {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 4px solid var(--slate-300);
+}
+
+.badge-card.unlocked {
+  border-left-color: var(--drexel-gold);
+}
+
+.badge-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.badge-icon {
+  font-size: 1.5rem;
+}
+
+.badge-points-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: var(--slate-100);
+  color: var(--slate-600);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.badge-points-tag.unlocked {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  margin-bottom: 0.25rem;
+}
+
+.badge-desc {
+  font-size: 0.75rem;
+  color: var(--slate-600);
+}
+
+.badge-status {
+  margin-top: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--slate-400);
+}
+
+.badge-status.unlocked {
+  color: #059669;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.leaderboard-rank-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.leaderboard-rank {
+  font-weight: 800;
+}
+
+.leaderboard-rank.gold {
+  color: #f59e0b;
+}
+
+.leaderboard-rank.silver {
+  color: #94a3b8;
+}
+
+.leaderboard-rank.bronze {
+  color: #b45309;
+}
+
+.leaderboard-name {
+  font-weight: 700;
+}
+
+.leaderboard-points {
+  font-weight: 800;
+  color: var(--drexel-blue);
+}
+
+.points-guide-list {
+  font-size: 0.75rem;
+  color: var(--slate-700);
+  line-height: 1.7;
+}

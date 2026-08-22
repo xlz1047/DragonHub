@@ -1,0 +1,115 @@
+.discover-banner {
+  background: linear-gradient(135deg, #07294D 0%, #0d3b6c 100%);
+  color: white;
+  border: none;
+}
+
+.discover-empty {
+  text-align: center;
+  color: var(--slate-500);
+  padding: 2rem;
+}
+
+.discover-banner-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.discover-banner-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin-bottom: 0.25rem;
+}
+
+.discover-banner-desc {
+  font-size: 0.8rem;
+  color: #bfdbfe;
+}
+
+.truck-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--slate-200);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.truck-img-wrapper {
+  position: relative;
+  height: 160px;
+  width: 100%;
+}
+
+.truck-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.truck-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.truck-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.truck-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--drexel-blue);
+  margin-bottom: 0.25rem;
+}
+
+.truck-cuisine {
+  font-size: 0.75rem;
+  color: var(--slate-500);
+  margin-bottom: 0.5rem;
+}
+
+.truck-famous-item {
+  font-size: 0.75rem;
+  color: var(--slate-700);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.truck-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--slate-600);
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--slate-100);
+}
+
+.truck-wait-tag {
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.truck-checkin-btn {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+}
