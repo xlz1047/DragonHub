@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Eats & Food Trucks | DrexelHub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/discover.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main class="main-content">
+    <div class="container">
+
+      <div class="card discover-banner">
+        <div class="discover-banner-row">
+          <div>
+            <h2 class="discover-banner-title">Lancaster Walk & Campus Dining</h2>
+            <p class="discover-banner-desc">Check in to earn +25 DREAMER points and view live wait times.</p>
+          </div>
+          <a href="/map.html" class="btn btn-gold">🗺️ View Trucks on Campus Map</a>
+        </div>
+      </div>
+
+      <div class="category-filter">
+        <button class="cat-btn active" data-cuisine="All">All Cuisines</button>
+        <button class="cat-btn" data-cuisine="Thai-Mexican Fusion">🌮 Thai-Mexican Fusion</button>
+        <button class="cat-btn" data-cuisine="Breakfast">🍳 Breakfast & Deli</button>
+        <button class="cat-btn" data-cuisine="Halal">🍚 Halal Rice & Gyros</button>
+        <button class="cat-btn" data-cuisine="Tacos">🌯 Street Tacos</button>
+      </div>
+
+      <div id="trucks-grid" class="grid-3-col"></div>
+
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/ui/layout.js"></script>
+  <script src="/js/ui/header.js"></script>
+  <script src="/js/ui/notifications.js"></script>
+  <script src="/js/ui/auth.js"></script>
+  <script src="/js/ui/modals.js"></script>
+  <script src="/js/ui/eats.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
