@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DragonHub | Drexel University Student Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+  <div class="hero-container">
+
+    <header class="top-nav">
+      <a href="/login.html" class="brand-logo">
+        <div class="brand-icon-box">🐉</div>
+        <div class="brand-text">Dragon<span>Hub</span> <span class="badge-drexel">DREXEL</span></div>
+      </a>
+
+      <a href="/feed.html" class="btn-browse-guest">
+        Browse as Guest →
+      </a>
+    </header>
+
+    <div class="hero-grid">
+
+      <div class="hero-left">
+        <div class="verified-pill">
+          <span>🛡️</span> @drexel.edu Verified Dragon Community
+        </div>
+
+        <h1 class="hero-title">
+          University City’s Hub for <span>Drexel Dragons</span>
+        </h1>
+
+        <p class="hero-desc">
+          Connect with fellow Drexel students across campus. Discover Lancaster Walk food trucks, buy & sell course textbooks, vote on Drexel campus polls, and map out campus spots around Mario the Dragon.
+        </p>
+
+        <div class="features-row">
+          <div class="feature-card">
+            <div class="feature-card-header">
+              <span>🥪</span> Food Trucks
+            </div>
+            <p>Cucina Zapata, Halal Carts & student reviews</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-header green">
+              <span>📚</span> Marketplace
+            </div>
+            <p>Peer-to-peer textbook & tech exchange</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-header gold">
+              <span>🏆</span> DREAMER Pts
+            </div>
+            <p>Earn badges & unlock UCity local perks</p>
+          </div>
+        </div>
+
+        <div class="quick-demo-box">
+          <div class="quick-demo-header">
+            <div class="quick-demo-title">
+              <span>✨</span> Quick Demo Dragon Login (Click to Test):
+            </div>
+            <span class="instant-access-tag">Instant Access</span>
+          </div>
+
+          <div class="quick-demo-cards">
+            <button type="button" class="demo-user-btn" data-quick-switch="usr_alex">
+              <img class="demo-avatar" src="/assets/test_profile1.png" alt="Alex Vance">
+              <div class="demo-user-info">
+                <div class="demo-user-name">Alex Vance (CS '27)</div>
+                <div class="demo-user-role">Verified Dragon</div>
+              </div>
+            </button>
+
+            <button type="button" class="demo-user-btn" data-quick-switch="usr_samantha">
+              <img class="demo-avatar" src="/assets/test_profile2.png" alt="Samantha">
+              <div class="demo-user-info">
+                <div class="demo-user-name">Samantha (BioMed '25)</div>
+                <div class="demo-user-role">Marketplace Seller</div>
+              </div>
+            </button>
+
+            <button type="button" class="demo-user-btn" data-quick-switch="usr_marcus">
+              <img class="demo-avatar" src="/assets/test_profile4.jpg" alt="Marcus">
+              <div class="demo-user-info">
+                <div class="demo-user-name">Marcus (LeBow '26)</div>
+                <div class="demo-user-role">Active Foodie</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="hero-right">
+        <div class="login-card">
+          <div class="auth-toggle-pill">
+            <button type="button" class="toggle-btn active" id="tab-signin" data-auth-tab="signin">Sign In</button>
+            <button type="button" class="toggle-btn" id="tab-signup" data-auth-tab="signup">Create Account</button>
+          </div>
+
+          <div class="login-header-text">
+            <h2 id="auth-title">Welcome Back, Dragon</h2>
+            <p id="auth-subtitle">Sign in with your Drexel credentials or Quick Demo accounts.</p>
+          </div>
+
+          <div id="login-error" class="login-error hidden"></div>
+
+          <form id="auth-form">
+            <div id="signup-extra-fields" class="hidden">
+              <div class="input-group">
+                <label class="input-label">Full Name</label>
+                <input type="text" id="auth-name" class="custom-input" placeholder="e.g. Mario Dragon">
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Major / College</label>
+                <input type="text" id="auth-major" class="custom-input" placeholder="e.g. Computer Science (CCI)">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Drexel Email</label>
+              <input type="email" id="auth-email" class="custom-input" placeholder="username@drexel.edu" value="av942@drexel.edu" required>
+              <div class="input-hint">Must end with @drexel.edu</div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Password</label>
+              <input type="password" id="auth-password" class="custom-input" placeholder="••••••••" value="dragon123" required>
+            </div>
+
+            <button type="submit" class="btn-submit-main" id="auth-submit-btn">
+              <span id="auth-submit-label">Sign In to DragonHub</span> →
+            </button>
+          </form>
+
+          <div class="guest-link-row">
+            <a href="/feed.html" class="guest-link">Continue as Guest Visitor →</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui/login.js"></script>
+</body>
+</html>
