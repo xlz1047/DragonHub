@@ -110,6 +110,8 @@ function filterMarketCategory(category, btnEl) {
     apiGetMarketplace(category).then(function (items) {
         allMarketplaceItems = items;
         renderMarketplace();
+    }).catch(function (e) {
+        console.error('Failed to filter marketplace:', e);
     });
 }
 
