@@ -33,7 +33,61 @@ function initLeafletMap() {
         marker.categoryType = loc.type;
         mapMarkers.push(marker);
     }
-}
+
+    let pendingMarker = null;
+    mapInstance.on('click', function(e) {
+        pendingMarker = e.latlng;
+        openModal('modal-add-marker');
+    });
+
+    document.getElementById('modal-add-marker').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    document.getElementById('add-marker-to').addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let locName = document.getElementById('marker-name').value;
+        let locDesc = document.getElementById('marker-desc').value;
+        if (pendingMarker){
+            let newMarker = window.L.marker([pendingMarker.lat, pendingMarker.lng])
+            .addTo(mapInstance);
+            let popUpBox = document.createElement('div');
+            let nameEl = document.createElement('strong');
+            nameEl.textContent = locName;
+            let descEl = document.createElement('p');
+            descEl.textContent = locDesc;
+            let deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '🗑️ Delete Pin';
+            deleteBtn.style.color = 'red';
+            deleteBtn.style.cursor = 'pointer';
+            deleteBtn.style.background  = 'none';
+            deleteBtn.style.border = 'none';
+            deleteBtn.addEventListener('click', function(){
+                mapInstance.removeLayer(newMarker);
+                mapMarkers.filter(function(m){
+                    return m!== newMarker;
+                });
+            });
+
+            popUpBox.append(nameEl);
+            popUpBox.append(descEl);
+            popUpBox.append(deleteBtn);
+            newMarker.bindPopup(popUpBox);
+            newMarker.categoryType = 'user';
+            mapMarkers.push(newMarker);
+            pendingMarker = null;
+            closeModal('modal-add-marker');
+            this.reset();
+        }
+    });
+
+    document.querySelector('[data-close-modal="modal-add-marker"]').addEventListener('click', function(e){
+        e.stopPropagation();
+        pendingMarker = null;
+        closeModal('modal-add-marker');
+    });
+    }
 
 function filterMapMarkers(type) {
     if (!mapInstance) {
