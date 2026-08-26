@@ -10,6 +10,22 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
+  <div id="modal-add-marker" class="hidden modal-overlay">
+  <div class="modal-box">
+  <div class="modal-header">
+  <h3>Add a Location</h3>
+  <button data-close-modal="modal-add-marker">Cancel</button>  
+  </div>
+      
+  <form id="add-marker-to">
+  <label>Name:</label>
+  <input id="marker-name" type="text" placeholder="ex: Korman Center" required />
+  <label>Description: </label>
+  <input id="marker-desc" type="text" placeholder="ex: Study Spot near Lebow" />
+  <button type="submit">Pin Location</button>
+  </form>
+  </div>
+  </div>
 
   <div id="site-header"></div>
   <div id="site-nav"></div>
@@ -25,11 +41,12 @@
           </div>
           <div class="map-toolbar-actions">
             <button type="button" class="btn btn-outline map-toolbar-btn" data-map-filter="all">Show All</button>
+            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="user">🐲 My Pins</button>
             <button type="button" class="btn btn-gold map-toolbar-btn" data-map-filter="food">🍔 Food Trucks</button>
             <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="academic">🏛️ Academics</button>
           </div>
         </div>
-
+        
         <div id="campus-map"></div>
 
         <div class="map-legend">
@@ -55,11 +72,12 @@
   <script src="/js/api.js"></script>
   <script src="/js/state.js"></script>
   <script src="/js/ui/layout.js"></script>
-  <script src="/js/ui/header.js"></script>
+  <script src="/js/ui/header.js"></script> 
   <script src="/js/ui/notifications.js"></script>
   <script src="/js/ui/auth.js"></script>
   <script src="/js/ui/modals.js"></script>
   <script src="/js/ui/map.js"></script>
   <script src="/js/app.js"></script>
+
 </body>
 </html>
