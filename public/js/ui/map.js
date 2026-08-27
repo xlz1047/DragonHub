@@ -26,7 +26,9 @@ function initLeafletMap() {
         { name: 'Nanu\'s Hot Chicken', lat: 39.9564, lng: -75.1893, desc: 'Halal Hot Chicken Truck that Features Loaded Fries and Hot Tenders', type: 'food' },
         { name: 'KC\'s Smoothie Truck', lat: 39.95666515968067, lng: -75.1892863426169, desc: 'Popular Fruit Smoothie Joint on Campus', type: 'food' },
         { name: 'Kami Food Truck', lat: 39.95554469453332, lng: -75.1895888116436, desc: 'Truck that serves delicious Korean Food', type: 'food' },
-        { name: 'Pete\'s Little Lunch Box', lat: 39.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly Breakfast and Lunch Truck', type: 'food' }
+        { name: 'Pete\'s Little Lunch Box', lat: 39.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly Breakfast and Lunch Truck', type: 'food' },
+        { name: 'Korman Center', lat: 39.95478102782406, lng: -75.18875181530149, desc: 'Location that offers a plethora of Studying Services, including Group Study Rooms and Tutoring Services', type: 'study' },
+        { name: 'Rush Building', lat: 39.95680946656349, lng: -75.18940558219164, desc: 'Host study spots and themed-spaces for students to encourage a student-life balance', type: 'study' }
         
     ];
 
