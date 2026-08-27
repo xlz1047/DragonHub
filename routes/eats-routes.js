@@ -29,26 +29,30 @@ module.exports = function (app) {
         try{
             let name = req.query.name;
             let location = req.query.location || 'Philadelphia, PA';
-            let response = await axios.get('https://api.yelp.com/v3/businesses/search',{
-                headers: {
-                    Authorization: `Bearer ${process.env.YELP_API_KEY}` //API Key for Yelp authentication
-                },
-                params: { //query parameters for url
-                    term: name,
-                    location: location,
-                    limit: 1
-                }
-            });
-
-            let business = response.data.businesses[0];
-            res.json({ //retrieves info we want to show the user such as rating, review count and the associated yelp page
-                rating: business.rating,
-                review_count: business.review_count,
-                url: business.url
-            });
-        } catch(error){
-            console.error(error);
-            res.status(500).json({error: 'Unable to fetch data'});
-        }
+            let businessId = req.query.id;
+            let url = businessId 
+            ? `https://api.yelp.com/v3/businesses/${businessId}`
+            : 'https://api.yelp.com/v3/businesses/search';
+        let response = await axios.get(url, {
+        headers: {
+            Authorization: `Bearer ${process.env.YELP_API_KEY}`
+        },
+            params: businessId ? {} : {
+            term: name,
+            location: location,
+            limit: 1
+            }    
     });
-};
+    let business = businessId ? response.data : response.data.businesses[0];
+    res.json({
+        rating: business.rating,
+        review_count: business.review_count,
+        url: business.url,
+        image_url: business.image_url
+    });
+    }  catch(error){
+        console.error(error);
+        res.status(500).json({error: 'Unable to fetch data'});
+    }
+});
+}       
