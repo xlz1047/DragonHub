@@ -1,5 +1,8 @@
 function apiGetCurrentUser() {
     return fetch('/api/auth/me').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load current user');
+        }
         return res.json();
     }).catch(function (e) {
         console.error('Error fetching user:', e);
@@ -37,6 +40,9 @@ function apiUpdateProfile(profileData) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profileData)
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to update profile');
+        }
         return res.json();
     });
 }
@@ -54,6 +60,9 @@ function apiGetPosts(category, search) {
         url = url + '?' + params.join('&');
     }
     return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load posts');
+        }
         return res.json();
     });
 }
@@ -64,6 +73,9 @@ function apiCreatePost(postData) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData)
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to create post');
+        }
         return res.json();
     });
 }
@@ -72,6 +84,9 @@ function apiLikePost(postId) {
     return fetch('/api/posts/' + postId + '/like', {
         method: 'POST'
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to like post');
+        }
         return res.json();
     });
 }
@@ -82,6 +97,9 @@ function apiAddComment(postId, content) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: content, content: content })
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to add comment');
+        }
         return res.json();
     });
 }
@@ -92,6 +110,9 @@ function apiGetVendors(cuisine) {
         url = url + '?cuisine=' + encodeURIComponent(cuisine);
     }
     return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load food trucks');
+        }
         return res.json();
     });
 }
@@ -100,6 +121,9 @@ function apiCheckInVendor(vendorId) {
     return fetch('/api/eats/' + vendorId + '/checkin', {
         method: 'POST'
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to check in');
+        }
         return res.json();
     });
 }
@@ -110,6 +134,9 @@ function apiGetMarketplace(category) {
         url = url + '?category=' + encodeURIComponent(category);
     }
     return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load marketplace');
+        }
         return res.json();
     });
 }
@@ -120,12 +147,18 @@ function apiCreateListing(listingData) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(listingData)
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to create listing');
+        }
         return res.json();
     });
 }
 
 function apiGetLandmarks() {
     return fetch('/api/landmarks').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load landmarks');
+        }
         return res.json();
     });
 }
@@ -134,12 +167,18 @@ function apiCheckInLandmark(landmarkId) {
     return fetch('/api/landmarks/' + landmarkId + '/checkin', {
         method: 'POST'
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to check in at landmark');
+        }
         return res.json();
     });
 }
 
 function apiGetPolls() {
     return fetch('/api/polls').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load polls');
+        }
         return res.json();
     });
 }
@@ -150,6 +189,9 @@ function apiCreatePoll(pollData) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pollData)
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to create poll');
+        }
         return res.json();
     });
 }
@@ -160,18 +202,27 @@ function apiVotePoll(pollId, optionId) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ optionId: optionId })
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to record vote');
+        }
         return res.json();
     });
 }
 
 function apiGetBadges() {
     return fetch('/api/achievements').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load achievements');
+        }
         return res.json();
     });
 }
 
 function apiGetNotifications() {
     return fetch('/api/notifications').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load notifications');
+        }
         return res.json();
     });
 }
@@ -180,12 +231,18 @@ function apiMarkNotificationsRead() {
     return fetch('/api/notifications/read', {
         method: 'POST'
     }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to update notifications');
+        }
         return res.json();
     });
 }
 
 function apiGetWeather() {
     return fetch('/api/weather').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load weather');
+        }
         return res.json();
     });
 }

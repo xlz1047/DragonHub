@@ -89,6 +89,8 @@ function markAllNotificationsRead() {
             allNotifications[i].read = true;
         }
         loadNotifications();
+    }).catch(function (e) {
+        console.error('Failed to mark notifications as read:', e);
     });
 }
 

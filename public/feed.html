@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Feed & Voices | DrexelHub</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/feed.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="grid-layout">
+
+        <div>
+          <div class="card">
+            <div class="form-composer">
+              <img class="avatar-md header-user-avatar" src="/assets/test_profile1.png" alt="Avatar">
+              <button type="button" class="form-input form-composer-input" data-open-modal="post-modal">
+                Share a campus tip, food truck line check, or study session...
+              </button>
+              <button type="button" class="btn btn-primary form-composer-icon-btn" data-open-modal="post-modal" title="Post Update">
+                ➕
+              </button>
+            </div>
+            <div class="form-composer-actions">
+              <button type="button" class="form-composer-action" data-open-modal="post-modal">
+                <span>✍️</span> Post Update
+              </button>
+              <a href="/polls.html" class="form-composer-action gold">
+                <span>📊</span> Create Poll <span class="form-points-tag">+20 Pts</span>
+              </a>
+              <a href="/marketplace.html" class="form-composer-action green">
+                <span>🏷️</span> Sell Item
+              </a>
+            </div>
+          </div>
+
+          <div class="category-filter">
+            <button class="cat-btn active" data-category="All">All Feeds</button>
+            <button class="cat-btn" data-category="Eats & Food Trucks">🍔 Eats & Trucks</button>
+            <button class="cat-btn" data-category="Academics & Study">📚 Academics & Study</button>
+            <button class="cat-btn" data-category="Co-op & Career">💼 Co-op & Career</button>
+            <button class="cat-btn" data-category="Campus Life">🐉 Campus Life</button>
+          </div>
+
+          <div id="posts-container"></div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span>📊</span> Official Drexel Dragon Poll
+              </div>
+              <a href="/polls.html" class="btn btn-gold">+ New Poll</a>
+            </div>
+            <div id="quick-poll-box"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span>🚚</span> Food Trucks on Lancaster Walk
+              </div>
+              <a href="/discover.html" class="sidebar-link">View All</a>
+            </div>
+            <div class="sidebar-list">
+              <div class="sidebar-list-row">
+                <div>
+                  <div class="sidebar-item-title">Cucina Zapata</div>
+                  <div class="sidebar-item-sub">Cap'n Crunch Chicken Burrito</div>
+                </div>
+                <span class="sidebar-status-open">Open • 10m line</span>
+              </div>
+              <div class="sidebar-list-row">
+                <div>
+                  <div class="sidebar-item-title">Happy Sunshine</div>
+                  <div class="sidebar-item-sub">Pork Roll, Egg & Cheese</div>
+                </div>
+                <span class="sidebar-status-open">Open • 5m line</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="post-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="card-title"><span>✍️</span> Create Campus Post</h3>
+        <button type="button" class="modal-close" data-close-modal="post-modal">✕</button>
+      </div>
+      <form id="post-form">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select id="new-post-cat" class="form-select">
+            <option value="Campus Life">🐉 Campus Life & Updates</option>
+            <option value="Eats & Food Trucks">🍔 Eats & Lancaster Walk Trucks</option>
+            <option value="Academics & Study">📚 Academics & Study Sessions</option>
+            <option value="Co-op & Career">💼 Co-op & SCDC Insights</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Post Content</label>
+          <textarea id="new-post-content" class="form-textarea" rows="4" placeholder="What's happening on the Drexel campus today?" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Image URL (Optional)</label>
+          <input type="url" id="new-post-image" class="form-input" placeholder="https://...">
+        </div>
+        <div class="form-actions-end">
+          <button type="button" class="btn btn-outline modal-close" data-close-modal="post-modal">Cancel</button>
+          <button type="submit" class="btn btn-gold">Publish (+15 Pts)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/ui/layout.js"></script>
+  <script src="/js/ui/header.js"></script>
+  <script src="/js/ui/notifications.js"></script>
+  <script src="/js/ui/auth.js"></script>
+  <script src="/js/ui/modals.js"></script>
+  <script src="/js/ui/posts.js"></script>
+  <script src="/js/ui/polls.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
