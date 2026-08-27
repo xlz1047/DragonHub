@@ -59,8 +59,22 @@ function initLeafletMap() {
         let locName = document.getElementById('marker-name').value;
         let locDesc = document.getElementById('marker-desc').value;
         if (pendingMarker){
+            fetch('/api/landmarks', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: locName,
+                    description: locDesc,
+                    lat: pendingMarker.lat,
+                    lng: pendingMarker.lng
+                })
+            })
+            .then(data => {
             let newMarker = window.L.marker([pendingMarker.lat, pendingMarker.lng])
             .addTo(mapInstance);
+            newMarker.on('click', function(e) {
+            window.L.DomEvent.stopPropagation(e);
+            });
             let popUpBox = document.createElement('div');
             let nameEl = document.createElement('strong');
             nameEl.textContent = locName;
@@ -74,11 +88,10 @@ function initLeafletMap() {
             deleteBtn.style.border = 'none';
             deleteBtn.addEventListener('click', function(){
                 mapInstance.removeLayer(newMarker);
-                mapMarkers.filter(function(m){
+                mapMarkers = mapMarkers.filter(function(m){
                     return m!== newMarker;
                 });
             });
-
             popUpBox.append(nameEl);
             popUpBox.append(descEl);
             popUpBox.append(deleteBtn);
@@ -87,9 +100,52 @@ function initLeafletMap() {
             mapMarkers.push(newMarker);
             pendingMarker = null;
             closeModal('modal-add-marker');
+        });
             this.reset();
         }
     });
+        fetch('/api/landmarks')
+            .then(response => response.json())
+            .then(landmarks =>{
+                landmarks.forEach(function (lm) {
+                    if (lm.category === 'User Pin'){
+                        let marker = window.L.marker([lm.latitude, lm.longitude])
+                        .addTo(mapInstance);
+                        marker.on('click', function(e) {
+                        window.L.DomEvent.stopPropagation(e);
+                        });
+                        let popUpBox = document.createElement('div');
+                        let nameEl = document.createElement('strong');
+                        nameEl.textContent = lm.name;
+                        let descEl = document.createElement('p');
+                        descEl.textContent = lm.description;
+                        let deleteBtn = document.createElement('button');
+                        deleteBtn.textContent = '🗑️ Delete Pin';
+                        deleteBtn.style.color = 'red';
+                        deleteBtn.style.cursor = 'pointer';
+                        deleteBtn.style.background = 'none';
+                        deleteBtn.style.border = 'none';
+                        deleteBtn.addEventListener('click', function() {
+                            fetch('api/landmarks/' + lm.id, {method: 'DELETE'})
+                            .then(()=> {
+                            mapInstance.removeLayer(marker);
+                            mapMarkers = mapMarkers.filter(function (m) {
+                                return m !== marker;
+                            });
+                        });
+                        });
+                            popUpBox.append(nameEl);
+                            popUpBox.append(descEl);
+                            popUpBox.append(deleteBtn);
+                            marker.bindPopup(popUpBox);
+                            marker.categoryType = 'user';
+                            mapMarkers.push(marker);
+                        
+                        };
+                    });
+                });
+    
+
 
     document.querySelector('[data-close-modal="modal-add-marker"]').addEventListener('click', function(e){
         e.stopPropagation();
