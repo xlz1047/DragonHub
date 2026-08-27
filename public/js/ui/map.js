@@ -18,15 +18,15 @@ function initLeafletMap() {
         { name: 'W. W. Hagerty Library', lat: 39.9553003416246, lng: -75.18989048494781, desc: '24/7 Dragons Learning Commons', type: 'academic' },
         { name: 'CCI Building (3675 Market)', lat: 39.95670442264374, lng: -75.19530267272984, desc: 'Computing & Informatics hub', type: 'academic' },
         { name: 'Drexel Main Building', lat: 39.954306602678564, lng: -75.1868606039876, desc: 'Historic heart of Drexel University', type: 'academic' },
-        { name: 'Lancaster Walk Food Trucks', lat: 339.95438694923685, lng: -75.18585942280245, desc: 'Cucina Zapata, Happy Sunshine & more', type: 'food' },
+        { name: 'Lancaster Walk Food Trucks', lat: 39.95438694923685, lng: -75.18585942280245, desc: 'Cucina Zapata, Happy Sunshine & more', type: 'food' },
         { name: 'Daskalakis Athletic Center', lat: 39.956285875507675, lng: -75.19058541294427, desc: 'Recreation Center & Dragon Arena', type: 'rec' },
         { name: 'LeBow College of Business', lat: 39.95508732929374, lng: -75.18809168154772, desc: 'Home of Finance, Business, and MBA programs', type: 'academic' },
         { name: 'Nesbitt Hall', lat: 39.95590928562843, lng: -75.18901729879538, desc: 'Auditorium dedicated to Public Health and Biology lectures', type: 'academic' },
         { name: 'Papadakis Integrated Sciences Building', lat: 39.954229361116454, lng: -75.18929325117242, desc: 'Location for Labs and Research Opportunities', type: 'academic' },
-        { name: 'Nanu\'s Hot Chicken', lat: 39.95666515968067, lng: -75.1892863426172, desc: 'Halal Hot Chicken Truck that Features Loaded Fries and Hot Tenders', type: 'food' },
+        { name: 'Nanu\'s Hot Chicken', lat: 39.9564, lng: -75.1893, desc: 'Halal Hot Chicken Truck that Features Loaded Fries and Hot Tenders', type: 'food' },
         { name: 'KC\'s Smoothie Truck', lat: 39.95666515968067, lng: -75.1892863426169, desc: 'Popular Fruit Smoothie Joint on Campus', type: 'food' },
         { name: 'Kami Food Truck', lat: 39.95554469453332, lng: -75.1895888116436, desc: 'Truck that serves delicious Korean Food', type: 'food' },
-        { name: 'Pete\'s Little Lunch Box', lat: 339.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly Breakfast and Lunch Truck', type: 'food' }
+        { name: 'Pete\'s Little Lunch Box', lat: 39.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly Breakfast and Lunch Truck', type: 'food' }
         
     ];
 
