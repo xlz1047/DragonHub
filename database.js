@@ -1,7 +1,10 @@
 let { Pool } = require('pg');
 
 let pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com') 
+    ? { rejectUnauthorized: false } 
+    : false
 });
 
 async function getUserById(id) {
