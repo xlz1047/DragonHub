@@ -22,4 +22,27 @@ module.exports = function (app) {
             res.status(500).json({ error: 'Unable to check in' });
         }
     });
-};
+
+    app.post('/api/landmarks', async function(req, res) {
+        try{
+            let user = await helpers.getCurrentUser(req);
+            let {
+                name, description, lat, lng} = req.body;
+            let result = await db.addLandmark(name, description, lat, lng);
+                res.json(result);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({error: 'Unable to save pin'});
+            }
+        });
+
+        app.delete('/api/landmarks/:id', async function(req, res) {
+            try {
+                await db.deleteLandmark(req.params.id);
+                res.json({success: true});
+            } catch(error) {
+                console.error(error);
+                res.status(500).json({error: 'Unable to delete pin'});
+            }
+        });
+        };

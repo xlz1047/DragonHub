@@ -163,6 +163,20 @@ async function getLandmarks() {
     return result.rows;
 }
 
+async function addLandmark(name, description, lat, lng){
+    let id = 'user_' + Date.now();
+    let result = await pool.query(
+        `INSERT INTO landmarks (id, name, description, address, image_url, latitude, longitude, category, points_reward)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, 'User Pin', 0) RETURNING *`,
+        [id, name, description, 'User Added', '/assets/place.png', lat, lng]
+    );
+    return result.rows[0];
+}
+
+async function deleteLandmark(id) {
+    await pool.query('DELETE FROM landmarks WHERE id = $1', [id]);
+}
+
 async function getPolls() {
     let result = await pool.query(
         'SELECT id, creator_id AS "creatorId", author_name AS "authorName", question, category, total_votes AS "totalVotes", created_at AS "createdAt" FROM polls ORDER BY created_at DESC'
@@ -262,6 +276,8 @@ module.exports = {
     getMarketplaceItems: getMarketplaceItems,
     createMarketplaceItem: createMarketplaceItem,
     getLandmarks: getLandmarks,
+    addLandmark: addLandmark,
+    deleteLandmark: deleteLandmark,
     getPolls: getPolls,
     createPoll: createPoll,
     votePoll: votePoll,
