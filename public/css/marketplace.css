@@ -84,6 +84,58 @@
   align-items: center;
 }
 
+.market-price-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.market-sold-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.market-card.market-sold {
+  opacity: 0.75;
+}
+
+.market-timestamp {
+  font-size: 0.65rem;
+  color: var(--slate-400);
+  margin-bottom: 0.5rem;
+}
+
+.market-owner-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-top: 1px solid var(--slate-100);
+  padding-top: 0.5rem;
+}
+
+.post-owner-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--slate-500);
+  padding: 0.2rem 0.4rem;
+}
+
+.post-owner-btn:hover {
+  color: var(--drexel-blue);
+}
+
+.post-owner-btn-danger:hover {
+  color: #dc2626;
+}
+
 .market-seller {
   font-size: 0.7rem;
   color: var(--slate-500);

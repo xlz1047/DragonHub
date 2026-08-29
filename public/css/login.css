@@ -88,6 +88,8 @@
       font-size: 0.85rem;
       font-weight: 700;
       text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
@@ -386,6 +388,47 @@
       margin-bottom: 1rem;
     }
 
+    .major-search-wrap {
+      position: relative;
+    }
+
+    .major-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .major-option {
+      padding: 0.55rem 0.75rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .major-option:hover {
+      background-color: #f8fafc;
+    }
+
+    .major-option-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .major-option-college {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
     .btn-submit-main {
       width: 100%;
       background: #07294D;
@@ -422,6 +465,10 @@
       color: #64748b;
       text-decoration: none;
       transition: color 0.2s ease;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .guest-link:hover {
@@ -451,4 +498,8 @@
       .hero-title {
         font-size: 2.25rem;
       }
+    }
+
+    .hidden {
+      display: none !important;
     }

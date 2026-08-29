@@ -11,10 +11,33 @@ async function getCurrentUser(req, tokenStorage) {
         }
     }
 
-    return await db.getFirstUser();
+    return null;
+}
+
+function buildGuestResponse() {
+    return {
+        id: null,
+        email: null,
+        name: 'Guest Visitor',
+        major: 'Browsing DragonHub',
+        classYear: '',
+        studentId: '',
+        role: 'Guest Visitor',
+        totalPoints: 0,
+        streak: 0,
+        avatarUrl: '/assets/default-avatar.png',
+        bio: '',
+        coop: '',
+        badgesEarned: [],
+        isGuest: true
+    };
 }
 
 async function buildUserResponse(user) {
+    if (!user) {
+        return buildGuestResponse();
+    }
+
     let badgesEarned = await db.getUserBadgeIds(user.id);
     return {
         id: user.id,
@@ -29,7 +52,8 @@ async function buildUserResponse(user) {
         avatarUrl: user.avatarUrl,
         bio: user.bio,
         coop: user.coop,
-        badgesEarned: badgesEarned
+        badgesEarned: badgesEarned,
+        isGuest: false
     };
 }
 

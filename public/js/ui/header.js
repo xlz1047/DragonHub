@@ -1,6 +1,6 @@
 function loadHeaderUser() {
     return apiGetCurrentUser().then(function (user) {
-        if (user && user.id) {
+        if (user) {
             currentUser = user;
             updateHeaderDisplay();
         }
@@ -34,7 +34,7 @@ function updateHeaderDisplay() {
 
     let streakEls = document.querySelectorAll('.header-user-streak');
     for (let i = 0; i < streakEls.length; i++) {
-        streakEls[i].textContent = (currentUser.streak || 5) + 'd';
+        streakEls[i].textContent = currentUser.streak + 'd';
     }
 
     let nameEls = document.querySelectorAll('.header-user-name');

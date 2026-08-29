@@ -75,7 +75,7 @@ function buildPostElement(post) {
 
     let majorEl = document.createElement('div');
     majorEl.classList.add('author-major');
-    majorEl.textContent = (post.authorMajor || 'Drexel Dragon') + ' • ' + (post.createdAt || 'Just now');
+    majorEl.textContent = (post.authorMajor || 'Drexel Dragon') + ' • ' + formatTimestamp(post.createdAt);
 
     authorInfo.append(nameEl);
     authorInfo.append(majorEl);
@@ -88,6 +88,33 @@ function buildPostElement(post) {
 
     authorRow.append(authorLeft);
     authorRow.append(categoryTag);
+
+    let isOwner = currentUser && !currentUser.isGuest && currentUser.id === post.authorId;
+
+    if (isOwner) {
+        let ownerControls = document.createElement('div');
+        ownerControls.classList.add('post-owner-controls');
+
+        let editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.classList.add('post-owner-btn');
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', function () {
+            editPost(post.id, post.content);
+        });
+
+        let deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.classList.add('post-owner-btn', 'post-owner-btn-danger');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', function () {
+            deletePost(post.id);
+        });
+
+        ownerControls.append(editBtn);
+        ownerControls.append(deleteBtn);
+        authorRow.append(ownerControls);
+    }
 
     let contentEl = document.createElement('div');
     contentEl.classList.add('post-content');
@@ -151,8 +178,26 @@ function buildPostElement(post) {
             commentText.classList.add('post-comment-text');
             commentText.textContent = c.text || c.content;
 
+            let commentTime = document.createElement('span');
+            commentTime.classList.add('post-comment-time');
+            commentTime.textContent = formatTimestamp(c.createdAt);
+
             commentLine.append(commentAuthor);
             commentLine.append(commentText);
+            commentLine.append(commentTime);
+
+            let isCommentOwner = currentUser && !currentUser.isGuest && currentUser.id === c.authorId;
+            if (isCommentOwner) {
+                let deleteCommentBtn = document.createElement('button');
+                deleteCommentBtn.type = 'button';
+                deleteCommentBtn.classList.add('post-comment-delete-btn');
+                deleteCommentBtn.textContent = 'Delete';
+                deleteCommentBtn.addEventListener('click', function () {
+                    deleteComment(post.id, c.id);
+                });
+                commentLine.append(deleteCommentBtn);
+            }
+
             commentsBox.append(commentLine);
         }
 
@@ -182,6 +227,61 @@ function buildPostElement(post) {
     return postItem;
 }
 
+function editPost(postId, currentContent) {
+    let newContent = window.prompt('Edit your post:', currentContent);
+    if (newContent === null || !newContent.trim()) {
+        return;
+    }
+
+    apiUpdatePost(postId, newContent.trim()).then(function (updatedPost) {
+        for (let i = 0; i < allPosts.length; i++) {
+            if (allPosts[i].id === postId) {
+                allPosts[i].content = updatedPost.content;
+                break;
+            }
+        }
+        renderPosts();
+    }).catch(function (e) {
+        console.error('Failed to edit post:', e);
+    });
+}
+
+function deletePost(postId) {
+    if (!window.confirm('Delete this post? This cannot be undone.')) {
+        return;
+    }
+
+    apiDeletePost(postId).then(function () {
+        allPosts = allPosts.filter(function (p) {
+            return p.id !== postId;
+        });
+        renderPosts();
+    }).catch(function (e) {
+        console.error('Failed to delete post:', e);
+    });
+}
+
+function deleteComment(postId, commentId) {
+    if (!window.confirm('Delete this comment?')) {
+        return;
+    }
+
+    apiDeleteComment(commentId).then(function () {
+        for (let i = 0; i < allPosts.length; i++) {
+            if (allPosts[i].id === postId) {
+                allPosts[i].comments = allPosts[i].comments.filter(function (c) {
+                    return c.id !== commentId;
+                });
+                allPosts[i].commentsCount = allPosts[i].comments.length;
+                break;
+            }
+        }
+        renderPosts();
+    }).catch(function (e) {
+        console.error('Failed to delete comment:', e);
+    });
+}
+
 function filterFeedCategory(category, btnEl) {
     activeFeedCategory = category;
     let btns = document.querySelectorAll('.cat-btn');
@@ -195,12 +295,16 @@ function filterFeedCategory(category, btnEl) {
 }
 
 function likePost(postId) {
+    if (!requireAuth()) {
+        return;
+    }
+
     apiLikePost(postId).then(function (data) {
         for (let i = 0; i < allPosts.length; i++) {
             if (allPosts[i].id === postId) {
-                allPosts[i].likes = data.likes || (allPosts[i].likes || 0) + 1;
-                allPosts[i].likesCount = allPosts[i].likes;
-                allPosts[i].isLiked = true;
+                allPosts[i].likes = data.likesCount;
+                allPosts[i].likesCount = data.likesCount;
+                allPosts[i].isLiked = data.isLiked;
                 break;
             }
         }
@@ -212,6 +316,10 @@ function likePost(postId) {
 }
 
 function submitComment(postId, commentText) {
+    if (!requireAuth()) {
+        return;
+    }
+
     if (!commentText || !commentText.trim()) {
         return;
     }
@@ -237,6 +345,11 @@ function submitComment(postId, commentText) {
 
 function handlePostSubmit(e) {
     e.preventDefault();
+
+    if (!requireAuth()) {
+        return;
+    }
+
     let content = document.getElementById('new-post-content').value;
     let category = document.getElementById('new-post-cat').value;
     let imageUrlEl = document.getElementById('new-post-image');
@@ -250,6 +363,7 @@ function handlePostSubmit(e) {
         closeModal('post-modal');
         document.getElementById('new-post-content').value = '';
         if (imageUrlEl) imageUrlEl.value = '';
+        resetImageUpload('new-post-image-file', 'new-post-image-preview', 'new-post-image');
         allPosts.unshift(newPost);
         renderPosts();
         loadHeaderUser();

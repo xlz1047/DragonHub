@@ -22,10 +22,16 @@ function loadProfile() {
         if (coopInput) coopInput.value = user.coop || '';
         if (bioInput) bioInput.value = user.bio || '';
         if (nameDisplay) nameDisplay.textContent = user.name;
-        if (emailDisplay) emailDisplay.textContent = user.email;
+        if (emailDisplay) emailDisplay.textContent = user.email || 'No account — browsing as guest';
         if (avatarEl) avatarEl.src = user.avatarUrl;
         if (cardName) cardName.textContent = user.name;
-        if (cardId) cardId.textContent = 'ID: ' + (user.studentId || '14892019') + ' • STUDENT';
+        if (cardId) {
+            if (user.isGuest) {
+                cardId.textContent = 'GUEST ACCESS • NOT VERIFIED';
+            } else {
+                cardId.textContent = 'ID: ' + (user.studentId || 'Pending') + ' • STUDENT';
+            }
+        }
         if (cardAvatar) cardAvatar.src = user.avatarUrl;
     }).catch(function (e) {
         console.error('Failed to load profile:', e);
@@ -34,6 +40,10 @@ function loadProfile() {
 
 function handleProfileUpdate(e) {
     e.preventDefault();
+
+    if (!requireAuth()) {
+        return;
+    }
 
     let name = document.getElementById('profile-name').value;
     let major = document.getElementById('profile-major').value;
@@ -77,6 +87,50 @@ function bindProfileForm() {
             handleProfileUpdate(e);
         });
     }
+}
+
+function bindProfilePhotoUpload() {
+    let fileInput = document.getElementById('profile-avatar-file');
+    let statusEl = document.getElementById('profile-avatar-file-status');
+
+    if (!fileInput) {
+        return;
+    }
+
+    fileInput.addEventListener('change', function () {
+        if (!fileInput.files[0]) {
+            return;
+        }
+
+        if (statusEl) {
+            statusEl.textContent = 'Uploading...';
+        }
+
+        uploadSelectedImage(fileInput, function (imageUrl) {
+            apiUpdateProfile({ avatarUrl: imageUrl }).then(function (updated) {
+                if (updated) {
+                    document.getElementById('profile-avatar').src = imageUrl;
+                    let cardAvatar = document.getElementById('dragoncard-avatar');
+                    if (cardAvatar) {
+                        cardAvatar.src = imageUrl;
+                    }
+                    if (statusEl) {
+                        statusEl.textContent = 'Photo updated';
+                    }
+                    loadHeaderUser();
+                }
+            }).catch(function (e) {
+                console.error('Failed to save new photo:', e);
+                if (statusEl) {
+                    statusEl.textContent = 'Failed to save photo';
+                }
+            });
+        }, function () {
+            if (statusEl) {
+                statusEl.textContent = 'Upload failed, please try again';
+            }
+        });
+    });
 }
 
 function bindSwitchAccountButtons() {

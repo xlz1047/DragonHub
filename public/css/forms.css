@@ -123,3 +123,66 @@
 .modal-close:hover {
   color: var(--slate-700);
 }
+
+.auth-required-message {
+  font-size: 0.85rem;
+  color: var(--slate-700);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.major-search-wrap {
+  position: relative;
+}
+
+.major-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.major-option {
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.major-option:hover {
+  background-color: var(--slate-50);
+}
+
+.major-option-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.major-option-college {
+  font-size: 0.7rem;
+  color: var(--slate-500);
+}
+
+.upload-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-top: 0.5rem;
+}
+
+.upload-status {
+  font-size: 0.7rem;
+  color: var(--slate-500);
+  margin-top: 0.35rem;
+}

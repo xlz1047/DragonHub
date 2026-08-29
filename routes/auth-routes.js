@@ -7,6 +7,19 @@ function makeToken() {
     return crypto.randomBytes(32).toString('hex');
 }
 
+function isValidStudentId(value) {
+    if (value.length !== 8) {
+        return false;
+    }
+    for (let i = 0; i < value.length; i++) {
+        let charCode = value.charCodeAt(i);
+        if (charCode < 48 || charCode > 57) {
+            return false;
+        }
+    }
+    return true;
+}
+
 module.exports = function (app, upload, tokenStorage, cookieOptions) {
     async function handleGetCurrentUser(req, res) {
         try {
@@ -28,9 +41,14 @@ module.exports = function (app, upload, tokenStorage, cookieOptions) {
             let email = req.body.email;
             let password = req.body.password;
             let major = req.body.major;
+            let studentId = req.body.studentId;
 
-            if (!name || !email || !password || !major) {
-                return res.status(400).json({ error: 'Name, email, password, and major are all required' });
+            if (!name || !email || !password || !major || !studentId) {
+                return res.status(400).json({ error: 'Name, student ID, email, password, and major are all required' });
+            }
+
+            if (!isValidStudentId(studentId)) {
+                return res.status(400).json({ error: 'Student ID must be exactly 8 digits' });
             }
 
             if (!email.endsWith('@drexel.edu')) {
@@ -53,8 +71,9 @@ module.exports = function (app, upload, tokenStorage, cookieOptions) {
                 email: email,
                 passwordHash: passwordHash,
                 major: major,
+                studentId: studentId,
                 classYear: req.body.classYear || 'Freshman',
-                avatarUrl: '/assets/test_profile1.png',
+                avatarUrl: '/assets/default-avatar.png',
                 bio: '',
                 coop: ''
             });
@@ -128,12 +147,17 @@ module.exports = function (app, upload, tokenStorage, cookieOptions) {
     app.put('/api/users/profile', async function (req, res) {
         try {
             let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required to update your profile', requiresAuth: true });
+            }
+
             let fields = {
                 name: req.body.name || user.name,
                 major: req.body.major || user.major,
                 classYear: req.body.classYear || req.body.gradYear || user.classYear,
                 bio: req.body.bio !== undefined ? req.body.bio : user.bio,
-                coop: req.body.coop !== undefined ? req.body.coop : user.coop
+                coop: req.body.coop !== undefined ? req.body.coop : user.coop,
+                avatarUrl: req.body.avatarUrl || user.avatarUrl
             };
             let updated = await db.updateUserProfile(user.id, fields);
             let response = await helpers.buildUserResponse(updated);

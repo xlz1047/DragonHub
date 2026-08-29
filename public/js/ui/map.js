@@ -50,58 +50,204 @@ let pendingPinLocation = null;
 
 function bindAddPinFeature() {
     mapInstance.on('click', function (e) {
+        if (!requireAuth()) {
+            return;
+        }
         pendingPinLocation = e.latlng;
-        openModal('modal-add-marker');
+        openAddPinPopup(e.latlng);
     });
 
-    let addMarkerForm = document.getElementById('add-marker-form');
-    if (addMarkerForm) {
-        addMarkerForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            handleAddMarkerSubmit();
-        });
-    }
-
-    let cancelBtn = document.querySelector('[data-close-modal="modal-add-marker"]');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', function () {
-            pendingPinLocation = null;
-        });
-    }
+    bindMapAddressSearch();
 }
 
-function handleAddMarkerSubmit() {
-    if (!pendingPinLocation) {
+function openAddPinPopup(latlng) {
+    let formBox = buildAddPinFormElement(latlng);
+
+    let popup = window.L.popup({
+        maxWidth: 240,
+        minWidth: 220,
+        closeButton: true,
+        className: 'add-pin-popup'
+    })
+        .setLatLng(latlng)
+        .setContent(formBox)
+        .openOn(mapInstance);
+
+    mapInstance.on('popupclose', function onClose() {
+        pendingPinLocation = null;
+        mapInstance.off('popupclose', onClose);
+    });
+}
+
+function buildAddPinFormElement(latlng) {
+    let wrapper = document.createElement('div');
+    wrapper.classList.add('add-pin-popup-box');
+
+    let title = document.createElement('h4');
+    title.classList.add('add-pin-popup-title');
+    title.textContent = '📍 Add a Campus Pin';
+    wrapper.append(title);
+
+    let addressInfo = document.createElement('p');
+    addressInfo.classList.add('add-pin-address-info');
+    addressInfo.textContent = 'Looking up address...';
+    wrapper.append(addressInfo);
+
+    apiReverseGeocode(latlng.lat, latlng.lng).then(function (data) {
+        addressInfo.textContent = data.formattedAddress;
+    }).catch(function () {
+        addressInfo.textContent = latlng.lat.toFixed(5) + ', ' + latlng.lng.toFixed(5);
+    });
+
+    let form = document.createElement('form');
+    form.classList.add('add-pin-popup-form');
+
+    let nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.classList.add('form-input', 'add-pin-input');
+    nameInput.placeholder = 'Location name';
+    nameInput.required = true;
+    form.append(nameInput);
+
+    let descInput = document.createElement('input');
+    descInput.type = 'text';
+    descInput.classList.add('form-input', 'add-pin-input');
+    descInput.placeholder = 'Short description (optional)';
+    form.append(descInput);
+
+    let photoInput = document.createElement('input');
+    photoInput.type = 'file';
+    photoInput.accept = 'image/*';
+    photoInput.capture = 'environment';
+    photoInput.classList.add('add-pin-photo-input');
+    form.append(photoInput);
+
+    let photoStatus = document.createElement('p');
+    photoStatus.classList.add('upload-status');
+    form.append(photoStatus);
+
+    let uploadedImageUrl = '';
+
+    photoInput.addEventListener('change', function () {
+        if (!photoInput.files[0]) {
+            return;
+        }
+        photoStatus.textContent = 'Uploading...';
+        uploadSelectedImage(photoInput, function (imageUrl) {
+            uploadedImageUrl = imageUrl;
+            photoStatus.textContent = 'Photo attached';
+        }, function () {
+            photoStatus.textContent = 'Upload failed, try again';
+        });
+    });
+
+    let actionsRow = document.createElement('div');
+    actionsRow.classList.add('add-pin-actions');
+
+    let cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.classList.add('btn', 'btn-outline', 'add-pin-btn');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', function () {
+        mapInstance.closePopup();
+    });
+
+    let submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.classList.add('btn', 'btn-gold', 'add-pin-btn');
+    submitBtn.textContent = 'Pin It';
+
+    actionsRow.append(cancelBtn);
+    actionsRow.append(submitBtn);
+    form.append(actionsRow);
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        handleAddMarkerSubmit(latlng, nameInput.value, descInput.value, uploadedImageUrl);
+    });
+
+    wrapper.append(form);
+
+    return wrapper;
+}
+
+function handleAddMarkerSubmit(latlng, name, description, imageUrl) {
+    if (!requireAuth()) {
         return;
     }
 
-    let nameInput = document.getElementById('marker-name');
-    let descInput = document.getElementById('marker-desc');
-    let name = nameInput.value;
-    let description = descInput.value;
-    let lat = pendingPinLocation.lat;
-    let lng = pendingPinLocation.lng;
+    if (!name || !name.trim()) {
+        return;
+    }
 
     apiAddLandmark({
-        name: name,
-        description: description,
-        lat: lat,
-        lng: lng
+        name: name.trim(),
+        description: description ? description.trim() : '',
+        lat: latlng.lat,
+        lng: latlng.lng,
+        imageUrl: imageUrl
     }).then(function (newLandmark) {
-        addUserPinMarker(name, description, lat, lng, newLandmark.id);
-        nameInput.value = '';
-        descInput.value = '';
+        addUserPinMarker(name.trim(), description ? description.trim() : '', latlng.lat, latlng.lng, newLandmark.id, imageUrl);
         pendingPinLocation = null;
-        closeModal('modal-add-marker');
+        mapInstance.closePopup();
     }).catch(function (e) {
         console.error('Failed to save pin:', e);
     });
 }
 
-function addUserPinMarker(name, description, lat, lng, landmarkId) {
+function bindMapAddressSearch() {
+    let searchInput = document.getElementById('map-address-search');
+    let searchBtn = document.getElementById('map-address-search-btn');
+    let statusEl = document.getElementById('map-address-search-status');
+
+    if (!searchInput || !searchBtn) {
+        return;
+    }
+
+    function runSearch() {
+        let address = searchInput.value;
+        if (!address.trim()) {
+            return;
+        }
+
+        statusEl.textContent = 'Searching...';
+
+        apiGeocodeAddress(address).then(function (data) {
+            mapInstance.setView([data.lat, data.lng], 17);
+
+            let searchMarker = window.L.marker([data.lat, data.lng]).addTo(mapInstance);
+            searchMarker.bindPopup(data.formattedAddress).openPopup();
+            searchMarker.categoryType = 'search';
+            mapMarkers.push(searchMarker);
+
+            statusEl.textContent = 'Found: ' + data.formattedAddress;
+        }).catch(function () {
+            statusEl.textContent = 'Address not found near campus. Try a different search.';
+        });
+    }
+
+    searchBtn.addEventListener('click', runSearch);
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            runSearch();
+        }
+    });
+}
+
+function addUserPinMarker(name, description, lat, lng, landmarkId, imageUrl) {
     let marker = window.L.marker([lat, lng]).addTo(mapInstance);
 
     let popupBox = document.createElement('div');
+
+    if (imageUrl) {
+        let photoEl = document.createElement('img');
+        photoEl.src = imageUrl;
+        photoEl.alt = name;
+        photoEl.classList.add('pin-popup-photo');
+        popupBox.append(photoEl);
+    }
 
     let nameEl = document.createElement('strong');
     nameEl.textContent = name;
@@ -142,7 +288,7 @@ function loadUserPins() {
         for (let i = 0; i < landmarks.length; i++) {
             let lm = landmarks[i];
             if (lm.category === 'User Pin') {
-                addUserPinMarker(lm.name, lm.description, lm.latitude, lm.longitude, lm.id);
+                addUserPinMarker(lm.name, lm.description, lm.latitude, lm.longitude, lm.id, lm.imageUrl);
             }
         }
     }).catch(function (e) {
@@ -253,6 +399,10 @@ function buildLandmarkElement(lm) {
 }
 
 function checkInLandmark(lmId) {
+    if (!requireAuth()) {
+        return;
+    }
+
     apiCheckInLandmark(lmId).then(function (data) {
         if (data) {
             alert('Checked in at campus location! +25 DREAMER Points awarded!');

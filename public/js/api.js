@@ -1,3 +1,12 @@
+function handleAuthRequiredResponse(res) {
+    if (res.status === 401) {
+        let modal = document.getElementById('auth-required-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+    }
+}
+
 function apiGetCurrentUser() {
     return fetch('/api/auth/me').then(function (res) {
         if (!res.ok) {
@@ -46,6 +55,14 @@ function apiSwitchUser(userId) {
     });
 }
 
+function apiLogout() {
+    return fetch('/api/auth/logout', {
+        method: 'POST'
+    }).then(function (res) {
+        return res.json();
+    });
+}
+
 function apiUpdateProfile(profileData) {
     return fetch('/api/users/profile', {
         method: 'PUT',
@@ -53,6 +70,7 @@ function apiUpdateProfile(profileData) {
         body: JSON.stringify(profileData)
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to update profile');
         }
         return res.json();
@@ -86,6 +104,7 @@ function apiCreatePost(postData) {
         body: JSON.stringify(postData)
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to create post');
         }
         return res.json();
@@ -97,6 +116,7 @@ function apiLikePost(postId) {
         method: 'POST'
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to like post');
         }
         return res.json();
@@ -110,7 +130,46 @@ function apiAddComment(postId, content) {
         body: JSON.stringify({ text: content, content: content })
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to add comment');
+        }
+        return res.json();
+    });
+}
+
+function apiUpdatePost(postId, content) {
+    return fetch('/api/posts/' + postId, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content })
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to update post');
+        }
+        return res.json();
+    });
+}
+
+function apiDeletePost(postId) {
+    return fetch('/api/posts/' + postId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to delete post');
+        }
+        return res.json();
+    });
+}
+
+function apiDeleteComment(commentId) {
+    return fetch('/api/posts/comment/' + commentId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to delete comment');
         }
         return res.json();
     });
@@ -144,7 +203,43 @@ function apiCheckInVendor(vendorId) {
         method: 'POST'
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to check in');
+        }
+        return res.json();
+    });
+}
+
+function apiGetTruckReviews(truckId) {
+    return fetch('/api/eats/' + truckId + '/reviews').then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to load reviews');
+        }
+        return res.json();
+    });
+}
+
+function apiAddTruckReview(truckId, rating, comment) {
+    return fetch('/api/eats/' + truckId + '/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating: rating, comment: comment })
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to submit review');
+        }
+        return res.json();
+    });
+}
+
+function apiDeleteTruckReview(reviewId) {
+    return fetch('/api/eats/reviews/' + reviewId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to delete review');
         }
         return res.json();
     });
@@ -170,7 +265,34 @@ function apiCreateListing(listingData) {
         body: JSON.stringify(listingData)
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to create listing');
+        }
+        return res.json();
+    });
+}
+
+function apiUpdateListing(itemId, fields) {
+    return fetch('/api/marketplace/' + itemId, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields)
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to update listing');
+        }
+        return res.json();
+    });
+}
+
+function apiDeleteListing(itemId) {
+    return fetch('/api/marketplace/' + itemId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to delete listing');
         }
         return res.json();
     });
@@ -190,6 +312,7 @@ function apiCheckInLandmark(landmarkId) {
         method: 'POST'
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to check in at landmark');
         }
         return res.json();
@@ -203,6 +326,7 @@ function apiAddLandmark(landmarkData) {
         body: JSON.stringify(landmarkData)
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to save pin');
         }
         return res.json();
@@ -214,7 +338,28 @@ function apiDeleteLandmark(landmarkId) {
         method: 'DELETE'
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to delete pin');
+        }
+        return res.json();
+    });
+}
+
+function apiGeocodeAddress(address) {
+    let url = '/api/geocode?address=' + encodeURIComponent(address);
+    return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Address not found');
+        }
+        return res.json();
+    });
+}
+
+function apiReverseGeocode(lat, lng) {
+    let url = '/api/reverse-geocode?lat=' + lat + '&lng=' + lng;
+    return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Location not found');
         }
         return res.json();
     });
@@ -236,6 +381,7 @@ function apiCreatePoll(pollData) {
         body: JSON.stringify(pollData)
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to create poll');
         }
         return res.json();
@@ -249,7 +395,20 @@ function apiVotePoll(pollId, optionId) {
         body: JSON.stringify({ optionId: optionId })
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to record vote');
+        }
+        return res.json();
+    });
+}
+
+function apiDeletePoll(pollId) {
+    return fetch('/api/polls/' + pollId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            handleAuthRequiredResponse(res);
+            throw new Error('Failed to delete poll');
         }
         return res.json();
     });
@@ -278,6 +437,7 @@ function apiMarkNotificationsRead() {
         method: 'POST'
     }).then(function (res) {
         if (!res.ok) {
+            handleAuthRequiredResponse(res);
             throw new Error('Failed to update notifications');
         }
         return res.json();

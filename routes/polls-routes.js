@@ -4,7 +4,9 @@ let helpers = require('../helpers');
 module.exports = function (app, tokenStorage) {
     app.get('/api/polls', async function (req, res) {
         try {
-            let polls = await db.getPolls();
+            let user = await helpers.getCurrentUser(req, tokenStorage);
+            let userId = user ? user.id : null;
+            let polls = await db.getPolls(userId);
             res.json(polls);
         } catch (error) {
             console.error(error);
@@ -15,6 +17,10 @@ module.exports = function (app, tokenStorage) {
     app.post('/api/polls', async function (req, res) {
         try {
             let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required to create a poll', requiresAuth: true });
+            }
+
             let question = req.body.question;
             let options = req.body.options;
 
@@ -48,7 +54,15 @@ module.exports = function (app, tokenStorage) {
     app.post('/api/polls/:id/vote', async function (req, res) {
         try {
             let user = await helpers.getCurrentUser(req, tokenStorage);
-            let poll = await db.votePoll(req.params.id, req.body.optionId);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required to vote', requiresAuth: true });
+            }
+
+            let poll = await db.votePoll(req.params.id, req.body.optionId, user.id);
+
+            if (poll === 'ALREADY_VOTED') {
+                return res.status(400).json({ error: 'You already voted on this poll' });
+            }
 
             if (!poll) {
                 return res.status(404).json({ error: 'Poll not found' });
@@ -59,6 +73,24 @@ module.exports = function (app, tokenStorage) {
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Unable to record vote' });
+        }
+    });
+
+    app.delete('/api/polls/:id', async function (req, res) {
+        try {
+            let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required', requiresAuth: true });
+            }
+
+            let deleted = await db.deletePoll(req.params.id, user.id);
+            if (!deleted) {
+                return res.status(403).json({ error: 'You can only delete your own polls' });
+            }
+            res.json({ success: true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Unable to delete poll' });
         }
     });
 };

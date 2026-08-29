@@ -227,6 +227,62 @@ function markActiveNavTab() {
     }
 }
 
+function buildAuthRequiredModal() {
+    let modal = document.createElement('div');
+    modal.id = 'auth-required-modal';
+    modal.classList.add('modal-backdrop', 'hidden');
+
+    let content = document.createElement('div');
+    content.classList.add('modal-content');
+
+    let header = document.createElement('div');
+    header.classList.add('modal-header');
+
+    let title = document.createElement('h3');
+    title.classList.add('card-title');
+    let titleIcon = document.createElement('span');
+    titleIcon.textContent = '🔒';
+    title.append(titleIcon);
+    title.append(document.createTextNode(' Sign In Required'));
+
+    let closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.classList.add('modal-close');
+    closeBtn.setAttribute('data-close-modal', 'auth-required-modal');
+    closeBtn.textContent = '✕';
+
+    header.append(title);
+    header.append(closeBtn);
+
+    let message = document.createElement('p');
+    message.classList.add('auth-required-message');
+    message.textContent = "You're browsing DragonHub as a guest. Sign in with your Drexel email to like posts, comment, vote, create listings, check in, and more.";
+
+    let actions = document.createElement('div');
+    actions.classList.add('form-actions-end');
+
+    let cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.classList.add('btn', 'btn-outline');
+    cancelBtn.setAttribute('data-close-modal', 'auth-required-modal');
+    cancelBtn.textContent = 'Keep Browsing';
+
+    let signInLink = document.createElement('a');
+    signInLink.classList.add('btn', 'btn-gold');
+    signInLink.href = '/login.html';
+    signInLink.textContent = 'Sign In / Create Account';
+
+    actions.append(cancelBtn);
+    actions.append(signInLink);
+
+    content.append(header);
+    content.append(message);
+    content.append(actions);
+    modal.append(content);
+
+    document.body.append(modal);
+}
+
 function renderLayout() {
     let headerTarget = document.getElementById('site-header');
     let navTarget = document.getElementById('site-nav');
@@ -238,5 +294,6 @@ function renderLayout() {
         navTarget.append(buildNav());
     }
 
+    buildAuthRequiredModal();
     markActiveNavTab();
 }
