@@ -84,6 +84,10 @@ function buildNotificationElement(n) {
 }
 
 function markAllNotificationsRead() {
+    if (!requireAuth()) {
+        return;
+    }
+
     return apiMarkNotificationsRead().then(function () {
         for (let i = 0; i < allNotifications.length; i++) {
             allNotifications[i].read = true;

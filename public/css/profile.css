@@ -21,6 +21,14 @@
   color: var(--slate-500);
 }
 
+.profile-photo-btn {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.65rem;
+  margin-top: 0.4rem;
+  cursor: pointer;
+  display: inline-block;
+}
+
 .dragon-card {
   background: linear-gradient(135deg, #07294D 0%, #041830 100%);
   color: white;

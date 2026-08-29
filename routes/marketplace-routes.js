@@ -15,6 +15,10 @@ module.exports = function (app, tokenStorage) {
     app.post('/api/marketplace', async function (req, res) {
         try {
             let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required to post a listing', requiresAuth: true });
+            }
+
             let title = req.body.title;
             let price = req.body.price;
 
@@ -45,5 +49,46 @@ module.exports = function (app, tokenStorage) {
 
     app.post('/api/marketplace/:id/save', function (req, res) {
         res.json({ isSaved: true });
+    });
+
+    app.put('/api/marketplace/:id', async function (req, res) {
+        try {
+            let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required', requiresAuth: true });
+            }
+
+            let updated = await db.updateMarketplaceItem(req.params.id, user.id, {
+                price: req.body.price,
+                description: req.body.description,
+                isSold: req.body.isSold
+            });
+
+            if (!updated) {
+                return res.status(403).json({ error: 'You can only edit your own listings' });
+            }
+            res.json(updated);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Unable to update listing' });
+        }
+    });
+
+    app.delete('/api/marketplace/:id', async function (req, res) {
+        try {
+            let user = await helpers.getCurrentUser(req, tokenStorage);
+            if (!user) {
+                return res.status(401).json({ error: 'Sign in required', requiresAuth: true });
+            }
+
+            let deleted = await db.deleteMarketplaceItem(req.params.id, user.id);
+            if (!deleted) {
+                return res.status(403).json({ error: 'You can only delete your own listings' });
+            }
+            res.json({ success: true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Unable to delete listing' });
+        }
     });
 };

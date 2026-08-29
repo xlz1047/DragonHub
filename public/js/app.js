@@ -14,6 +14,7 @@ function loadPage() {
     if (document.getElementById('posts-container')) {
         loadFeed();
         bindPostEvents();
+        bindImageUploadPreview('new-post-image-file', 'new-post-image-preview', 'new-post-image');
     }
 
     if (document.getElementById('polls-list')) {
@@ -29,6 +30,7 @@ function loadPage() {
     if (document.getElementById('marketplace-grid')) {
         loadMarketplace();
         bindMarketplaceEvents();
+        bindImageUploadPreview('item-image-file', 'item-image-preview', 'item-image');
     }
 
     if (document.getElementById('campus-map')) {
@@ -45,5 +47,7 @@ function loadPage() {
         loadProfile();
         bindProfileForm();
         bindSwitchAccountButtons();
+        setupMajorSearchDropdown('profile-major', 'profile-major-dropdown');
+        bindProfilePhotoUpload();
     }
 }

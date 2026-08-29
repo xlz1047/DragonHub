@@ -100,6 +100,46 @@
   color: var(--slate-400);
 }
 
+.post-owner-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.post-owner-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--slate-500);
+  padding: 0.2rem 0.4rem;
+}
+
+.post-owner-btn:hover {
+  color: var(--drexel-blue);
+}
+
+.post-owner-btn-danger:hover {
+  color: #dc2626;
+}
+
+.post-comment-time {
+  font-size: 0.65rem;
+  color: var(--slate-400);
+  margin-left: 0.4rem;
+}
+
+.post-comment-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-left: 0.5rem;
+}
+
 .post-comments {
   background-color: var(--slate-50);
   padding: 0.6rem 0.85rem;
@@ -167,6 +207,15 @@
   align-items: center;
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.poll-option-btn.poll-voted {
+  cursor: default;
+}
+
+.poll-option-btn.poll-option-chosen {
+  border-color: var(--drexel-blue);
+  border-width: 2px;
 }
 
 .poll-bar {

@@ -1,5 +1,18 @@
 let currentAuthMode = 'signin';
 
+function isValidStudentId(value) {
+    if (value.length !== 8) {
+        return false;
+    }
+    for (let i = 0; i < value.length; i++) {
+        let charCode = value.charCodeAt(i);
+        if (charCode < 48 || charCode > 57) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function setAuthTab(mode) {
     currentAuthMode = mode;
     let signInBtn = document.getElementById('tab-signin');
@@ -10,6 +23,9 @@ function setAuthTab(mode) {
     let extraFields = document.getElementById('signup-extra-fields');
     let emailInput = document.getElementById('auth-email');
     let passwordInput = document.getElementById('auth-password');
+    let nameInput = document.getElementById('auth-name');
+    let studentIdInput = document.getElementById('auth-student-id');
+    let majorInput = document.getElementById('auth-major');
     let errorEl = document.getElementById('login-error');
 
     errorEl.classList.add('hidden');
@@ -22,8 +38,8 @@ function setAuthTab(mode) {
         subtitle.textContent = 'Sign in with your Drexel credentials or Quick Demo accounts.';
         submitLabel.textContent = 'Sign In to DragonHub';
         extraFields.classList.add('hidden');
-        emailInput.value = 'av942@drexel.edu';
-        passwordInput.value = 'dragon123';
+        emailInput.value = '';
+        passwordInput.value = '';
     } else {
         signUpBtn.classList.add('active');
         signInBtn.classList.remove('active');
@@ -33,6 +49,9 @@ function setAuthTab(mode) {
         extraFields.classList.remove('hidden');
         emailInput.value = '';
         passwordInput.value = '';
+        nameInput.value = '';
+        studentIdInput.value = '';
+        majorInput.value = '';
     }
 }
 
@@ -68,6 +87,7 @@ function handleSigninSubmit(errorEl) {
 
 function handleSignupSubmit(errorEl) {
     let name = document.getElementById('auth-name').value;
+    let studentId = document.getElementById('auth-student-id').value;
     let major = document.getElementById('auth-major').value;
     let email = document.getElementById('auth-email').value;
     let password = document.getElementById('auth-password').value;
@@ -78,8 +98,15 @@ function handleSignupSubmit(errorEl) {
         return;
     }
 
+    if (!isValidStudentId(studentId.trim())) {
+        errorEl.classList.remove('hidden');
+        errorEl.textContent = 'Student ID must be exactly 8 digits.';
+        return;
+    }
+
     apiSignup({
         name: name,
+        studentId: studentId.trim(),
         major: major,
         email: email,
         password: password
@@ -96,6 +123,14 @@ function handleSignupSubmit(errorEl) {
     });
 }
 
+function browseAsGuest() {
+    apiLogout().then(function () {
+        window.location.href = '/feed.html';
+    }).catch(function () {
+        window.location.href = '/feed.html';
+    });
+}
+
 function quickSwitchLogin(userId) {
     apiSwitchUser(userId).then(function (res) {
         if (res.ok) {
@@ -108,6 +143,8 @@ function quickSwitchLogin(userId) {
 }
 
 function initLoginPage() {
+    setupMajorSearchDropdown('auth-major', 'auth-major-dropdown');
+
     let signInTab = document.getElementById('tab-signin');
     let signUpTab = document.getElementById('tab-signup');
     if (signInTab) {
@@ -133,6 +170,20 @@ function initLoginPage() {
         quickSwitchButtons[i].addEventListener('click', function () {
             let userId = this.getAttribute('data-quick-switch');
             quickSwitchLogin(userId);
+        });
+    }
+
+    let browseGuestBtn = document.getElementById('browse-guest-btn');
+    if (browseGuestBtn) {
+        browseGuestBtn.addEventListener('click', function () {
+            browseAsGuest();
+        });
+    }
+
+    let continueGuestBtn = document.getElementById('continue-guest-btn');
+    if (continueGuestBtn) {
+        continueGuestBtn.addEventListener('click', function () {
+            browseAsGuest();
         });
     }
 }

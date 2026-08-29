@@ -16,6 +16,10 @@ function bindModalTriggers() {
     let openButtons = document.querySelectorAll('[data-open-modal]');
     for (let i = 0; i < openButtons.length; i++) {
         openButtons[i].addEventListener('click', function () {
+            let needsAuth = this.getAttribute('data-requires-auth') === 'true';
+            if (needsAuth && !requireAuth()) {
+                return;
+            }
             let modalId = this.getAttribute('data-open-modal');
             openModal(modalId);
         });

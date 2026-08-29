@@ -47,6 +47,9 @@ function buildListingElement(item) {
 
     let card = document.createElement('div');
     card.classList.add('market-card');
+    if (item.isSold) {
+        card.classList.add('market-sold');
+    }
 
     let imgEl = document.createElement('img');
     imgEl.classList.add('market-img');
@@ -57,9 +60,20 @@ function buildListingElement(item) {
     let body = document.createElement('div');
     body.classList.add('market-body');
 
+    let priceRow = document.createElement('div');
+    priceRow.classList.add('market-price-row');
+
     let priceEl = document.createElement('div');
     priceEl.classList.add('market-price');
     priceEl.textContent = '$' + item.price;
+    priceRow.append(priceEl);
+
+    if (item.isSold) {
+        let soldTag = document.createElement('span');
+        soldTag.classList.add('market-sold-tag');
+        soldTag.textContent = 'SOLD';
+        priceRow.append(soldTag);
+    }
 
     let categoryEl = document.createElement('div');
     categoryEl.classList.add('market-category');
@@ -73,10 +87,51 @@ function buildListingElement(item) {
     descEl.classList.add('market-desc');
     descEl.textContent = desc;
 
-    body.append(priceEl);
+    let timeEl = document.createElement('div');
+    timeEl.classList.add('market-timestamp');
+    timeEl.textContent = 'Listed ' + formatTimestamp(item.createdAt);
+
+    body.append(priceRow);
     body.append(categoryEl);
     body.append(titleEl);
     body.append(descEl);
+    body.append(timeEl);
+
+    let isOwner = currentUser && !currentUser.isGuest && currentUser.id === item.sellerId;
+
+    if (isOwner) {
+        let ownerControls = document.createElement('div');
+        ownerControls.classList.add('market-owner-controls');
+
+        let editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.classList.add('post-owner-btn');
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', function () {
+            editListing(item);
+        });
+
+        let soldBtn = document.createElement('button');
+        soldBtn.type = 'button';
+        soldBtn.classList.add('post-owner-btn');
+        soldBtn.textContent = item.isSold ? 'Mark Available' : 'Mark Sold';
+        soldBtn.addEventListener('click', function () {
+            toggleListingSold(item);
+        });
+
+        let deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.classList.add('post-owner-btn', 'post-owner-btn-danger');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', function () {
+            deleteListing(item.id);
+        });
+
+        ownerControls.append(editBtn);
+        ownerControls.append(soldBtn);
+        ownerControls.append(deleteBtn);
+        body.append(ownerControls);
+    }
 
     let footer = document.createElement('div');
     footer.classList.add('market-footer');
@@ -99,6 +154,67 @@ function buildListingElement(item) {
     return card;
 }
 
+function editListing(item) {
+    let newPrice = window.prompt('Edit price:', item.price);
+    if (newPrice === null || newPrice.trim() === '') {
+        return;
+    }
+
+    let newDescription = window.prompt('Edit description:', item.description || '');
+    if (newDescription === null) {
+        return;
+    }
+
+    apiUpdateListing(item.id, {
+        price: Number(newPrice),
+        description: newDescription,
+        isSold: item.isSold
+    }).then(function (updated) {
+        for (let i = 0; i < allMarketplaceItems.length; i++) {
+            if (allMarketplaceItems[i].id === item.id) {
+                allMarketplaceItems[i] = updated;
+                break;
+            }
+        }
+        renderMarketplace();
+    }).catch(function (e) {
+        console.error('Failed to update listing:', e);
+    });
+}
+
+function toggleListingSold(item) {
+    apiUpdateListing(item.id, {
+        price: item.price,
+        description: item.description,
+        isSold: !item.isSold
+    }).then(function (updated) {
+        for (let i = 0; i < allMarketplaceItems.length; i++) {
+            if (allMarketplaceItems[i].id === item.id) {
+                allMarketplaceItems[i] = updated;
+                break;
+            }
+        }
+        renderMarketplace();
+    }).catch(function (e) {
+        console.error('Failed to update listing:', e);
+    });
+}
+
+function deleteListing(itemId) {
+    if (!window.confirm('Delete this listing? This cannot be undone.')) {
+        return;
+    }
+
+    apiDeleteListing(itemId).then(function () {
+        allMarketplaceItems = allMarketplaceItems.filter(function (m) {
+            return m.id !== itemId;
+        });
+        renderMarketplace();
+    }).catch(function (e) {
+        console.error('Failed to delete listing:', e);
+    });
+}
+
 function filterMarketCategory(category, btnEl) {
     let btns = document.querySelectorAll('.cat-btn');
     for (let i = 0; i < btns.length; i++) {
@@ -117,6 +233,10 @@ function filterMarketCategory(category, btnEl) {
 
 function handleListingSubmit(e) {
     e.preventDefault();
+
+    if (!requireAuth()) {
+        return;
+    }
 
     let title = document.getElementById('item-title').value;
     let price = document.getElementById('item-price').value;
@@ -140,6 +260,7 @@ function handleListingSubmit(e) {
             closeModal('listing-modal');
             document.getElementById('item-title').value = '';
             document.getElementById('item-price').value = '';
+            resetImageUpload('item-image-file', 'item-image-preview', 'item-image');
             loadMarketplace();
             loadHeaderUser();
         }

@@ -19,39 +19,7 @@ function renderQuickPoll() {
         questionEl.textContent = poll.question;
         container.append(questionEl);
 
-        let optionsBox = document.createElement('div');
-        optionsBox.classList.add('poll-options');
-
-        for (let i = 0; i < poll.options.length; i++) {
-            let opt = poll.options[i];
-            let pct = poll.totalVotes > 0 ? Math.round((opt.votes / poll.totalVotes) * 100) : 0;
-
-            let optBtn = document.createElement('button');
-            optBtn.type = 'button';
-            optBtn.classList.add('poll-option-btn');
-
-            let barEl = document.createElement('div');
-            barEl.classList.add('poll-bar');
-            barEl.style.width = pct + '%';
-
-            let textEl = document.createElement('span');
-            textEl.classList.add('poll-option-text');
-            textEl.textContent = opt.text;
-
-            let pctEl = document.createElement('span');
-            pctEl.classList.add('poll-option-pct');
-            pctEl.textContent = pct + '%';
-
-            optBtn.append(barEl);
-            optBtn.append(textEl);
-            optBtn.append(pctEl);
-            optBtn.addEventListener('click', function () {
-                votePoll(poll.id, opt.id);
-            });
-
-            optionsBox.append(optBtn);
-        }
-
+        let optionsBox = buildPollOptionsElement(poll);
         container.append(optionsBox);
 
         let footerEl = document.createElement('div');
@@ -63,7 +31,63 @@ function renderQuickPoll() {
     });
 }
 
+function buildPollOptionsElement(poll) {
+    let optionsBox = document.createElement('div');
+    optionsBox.classList.add('poll-options');
+
+    let alreadyVoted = !!poll.userVotedOptionId;
+
+    for (let i = 0; i < poll.options.length; i++) {
+        let opt = poll.options[i];
+        let pct = poll.totalVotes > 0 ? Math.round((opt.votes / poll.totalVotes) * 100) : 0;
+
+        let optBtn = document.createElement('button');
+        optBtn.type = 'button';
+        optBtn.classList.add('poll-option-btn');
+
+        if (alreadyVoted) {
+            optBtn.classList.add('poll-voted');
+            if (opt.id === poll.userVotedOptionId) {
+                optBtn.classList.add('poll-option-chosen');
+            }
+        }
+
+        let barEl = document.createElement('div');
+        barEl.classList.add('poll-bar');
+        barEl.style.width = pct + '%';
+
+        let textEl = document.createElement('span');
+        textEl.classList.add('poll-option-text');
+        textEl.textContent = opt.text;
+        if (opt.id === poll.userVotedOptionId) {
+            textEl.textContent = textEl.textContent + ' ✓';
+        }
+
+        let pctEl = document.createElement('span');
+        pctEl.classList.add('poll-option-pct');
+        pctEl.textContent = pct + '%';
+
+        optBtn.append(barEl);
+        optBtn.append(textEl);
+        optBtn.append(pctEl);
+
+        if (!alreadyVoted) {
+            optBtn.addEventListener('click', function () {
+                votePoll(poll.id, opt.id);
+            });
+        }
+
+        optionsBox.append(optBtn);
+    }
+
+    return optionsBox;
+}
+
 function votePoll(pollId, optionId) {
+    if (!requireAuth()) {
+        return;
+    }
+
     apiVotePoll(pollId, optionId).then(function (updatedPoll) {
         for (let i = 0; i < allPolls.length; i++) {
             if (allPolls[i].id === pollId) {
@@ -129,46 +153,31 @@ function buildPollCardElement(poll) {
     topRow.append(categoryEl);
     pollCard.append(topRow);
 
-    let optionsBox = document.createElement('div');
-    optionsBox.classList.add('poll-options');
+    let isOwner = currentUser && !currentUser.isGuest && currentUser.id === poll.creatorId;
+    if (isOwner) {
+        let ownerControls = document.createElement('div');
+        ownerControls.classList.add('poll-owner-controls');
 
-    for (let j = 0; j < poll.options.length; j++) {
-        let opt = poll.options[j];
-        let pct = poll.totalVotes > 0 ? Math.round((opt.votes / poll.totalVotes) * 100) : 0;
-
-        let optBtn = document.createElement('button');
-        optBtn.type = 'button';
-        optBtn.classList.add('poll-option-btn');
-
-        let barEl = document.createElement('div');
-        barEl.classList.add('poll-bar');
-        barEl.style.width = pct + '%';
-
-        let textEl = document.createElement('span');
-        textEl.classList.add('poll-option-text');
-        textEl.textContent = opt.text;
-
-        let pctEl = document.createElement('span');
-        pctEl.classList.add('poll-option-pct');
-        pctEl.textContent = pct + '%';
-
-        optBtn.append(barEl);
-        optBtn.append(textEl);
-        optBtn.append(pctEl);
-        optBtn.addEventListener('click', function () {
-            votePoll(poll.id, opt.id);
+        let deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.classList.add('post-owner-btn', 'post-owner-btn-danger');
+        deleteBtn.textContent = 'Delete Poll';
+        deleteBtn.addEventListener('click', function () {
+            deletePoll(poll.id);
         });
 
-        optionsBox.append(optBtn);
+        ownerControls.append(deleteBtn);
+        pollCard.append(ownerControls);
     }
 
+    let optionsBox = buildPollOptionsElement(poll);
     pollCard.append(optionsBox);
 
     let footerEl = document.createElement('div');
     footerEl.classList.add('poll-card-footer');
 
     let byEl = document.createElement('span');
-    byEl.textContent = 'By ' + poll.authorName;
+    byEl.textContent = 'By ' + poll.authorName + ' • ' + formatTimestamp(poll.createdAt);
 
     let votesEl = document.createElement('span');
     votesEl.textContent = poll.totalVotes + ' votes';
@@ -180,8 +189,28 @@ function buildPollCardElement(poll) {
     return pollCard;
 }
 
+function deletePoll(pollId) {
+    if (!window.confirm('Delete this poll? This cannot be undone.')) {
+        return;
+    }
+
+    apiDeletePoll(pollId).then(function () {
+        allPolls = allPolls.filter(function (p) {
+            return p.id !== pollId;
+        });
+        renderPollsList();
+    }).catch(function (e) {
+        console.error('Failed to delete poll:', e);
+    });
+}
+
 function handlePollSubmit(e) {
     e.preventDefault();
+
+    if (!requireAuth()) {
+        return;
+    }
+
     let question = document.getElementById('poll-question-input').value;
     let category = document.getElementById('poll-category-input').value;
     let optInputs = document.querySelectorAll('.poll-opt-input');
