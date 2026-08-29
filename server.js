@@ -1,13 +1,21 @@
 require('dotenv').config();
 
 let express = require('express');
-let session = require('express-session');
+let cookieParser = require('cookie-parser');
 let multer = require('multer');
 let path = require('path');
 let fs = require('fs');
 
 let app = express();
 let PORT = process.env.PORT || 3000;
+
+let tokenStorage = {};
+
+let cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+};
 
 let UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -32,26 +40,22 @@ let upload = multer({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'drexel-dragons-secret-key-2026',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000, secure: false }
-}));
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(UPLOADS_DIR));
 
-require('./routes/auth-routes')(app, upload);
-require('./routes/posts-routes')(app);
-require('./routes/eats-routes')(app);
-require('./routes/marketplace-routes')(app);
-require('./routes/landmarks-routes')(app);
-require('./routes/polls-routes')(app);
+require('./routes/auth-routes')(app, upload, tokenStorage, cookieOptions);
+require('./routes/posts-routes')(app, tokenStorage);
+require('./routes/eats-routes')(app, tokenStorage);
+require('./routes/marketplace-routes')(app, tokenStorage);
+require('./routes/landmarks-routes')(app, tokenStorage);
+require('./routes/polls-routes')(app, tokenStorage);
 require('./routes/achievements-routes')(app);
-require('./routes/notifications-routes')(app);
+require('./routes/notifications-routes')(app, tokenStorage);
 require('./routes/weather-routes')(app);
+require('./routes/yelp-routes')(app);
+require('./routes/geoapify-routes')(app);
 
 app.listen(PORT, function () {
     console.log('DrexelHub server running on http://localhost:' + PORT);

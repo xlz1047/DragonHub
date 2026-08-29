@@ -10,22 +10,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
-  <div id="modal-add-marker" class="hidden modal-overlay">
-  <div class="modal-box">
-  <div class="modal-header">
-  <h3>Add a Location</h3>
-  <button data-close-modal="modal-add-marker">Cancel</button>  
-  </div>
-      
-  <form id="add-marker-to">
-  <label>Name:</label>
-  <input id="marker-name" type="text" placeholder="ex: The Board and Brew" required />
-  <label>Description: </label>
-  <input id="marker-desc" type="text" placeholder="ex: Cafe I Like Studying At" />
-  <button type="submit">Pin Location</button>
-  </form>
-  </div>
-  </div>
 
   <div id="site-header"></div>
   <div id="site-nav"></div>
@@ -37,17 +21,17 @@
         <div class="card-header">
           <div>
             <h2 class="card-title"><span>🗺️</span> Interactive Drexel Campus Map (University City)</h2>
-            <p class="map-toolbar-desc">Powered by Leaflet.js & OpenStreetMap. Explore academic halls, food trucks, and set your own pins.</p>
+            <p class="map-toolbar-desc">Powered by Leaflet.js & OpenStreetMap. Explore academic halls, food trucks, study lounges — or click the map to drop your own pin.</p>
           </div>
           <div class="map-toolbar-actions">
             <button type="button" class="btn btn-outline map-toolbar-btn" data-map-filter="all">Show All</button>
-            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="user">🐲 My Pins</button>
             <button type="button" class="btn btn-gold map-toolbar-btn" data-map-filter="food">🍔 Food Trucks</button>
-            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="academic">🏛️ Academic Buildings</button>
-            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="study">📚 Study Spots </button>
+            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="academic">🏛️ Academics</button>
+            <button type="button" class="btn btn-primary map-toolbar-btn" data-map-filter="study">📚 Study Spots</button>
+            <button type="button" class="btn btn-outline map-toolbar-btn" data-map-filter="user">🐲 My Pins</button>
           </div>
         </div>
-        
+
         <div id="campus-map"></div>
 
         <div class="map-legend">
@@ -69,16 +53,38 @@
     </div>
   </main>
 
+  <div id="modal-add-marker" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="card-title"><span>📍</span> Add a Campus Pin</h3>
+        <button type="button" class="modal-close" data-close-modal="modal-add-marker">✕</button>
+      </div>
+      <form id="add-marker-form">
+        <div class="form-group">
+          <label class="form-label">Location Name</label>
+          <input type="text" id="marker-name" class="form-input" placeholder="e.g. The Board and Brew" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <input type="text" id="marker-desc" class="form-input" placeholder="e.g. Cafe I like studying at">
+        </div>
+        <div class="form-actions-end">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-add-marker">Cancel</button>
+          <button type="submit" class="btn btn-gold">Pin Location</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="/js/api.js"></script>
   <script src="/js/state.js"></script>
   <script src="/js/ui/layout.js"></script>
-  <script src="/js/ui/header.js"></script> 
+  <script src="/js/ui/header.js"></script>
   <script src="/js/ui/notifications.js"></script>
   <script src="/js/ui/auth.js"></script>
   <script src="/js/ui/modals.js"></script>
   <script src="/js/ui/map.js"></script>
   <script src="/js/app.js"></script>
-
 </body>
 </html>

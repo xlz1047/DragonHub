@@ -1,11 +1,16 @@
 let bcrypt = require('bcryptjs');
+let crypto = require('crypto');
 let db = require('../database');
 let helpers = require('../helpers');
 
-module.exports = function (app, upload) {
+function makeToken() {
+    return crypto.randomBytes(32).toString('hex');
+}
+
+module.exports = function (app, upload, tokenStorage, cookieOptions) {
     async function handleGetCurrentUser(req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let response = await helpers.buildUserResponse(user);
             res.json(response);
         } catch (error) {
@@ -16,6 +21,54 @@ module.exports = function (app, upload) {
 
     app.get('/api/auth/me', handleGetCurrentUser);
     app.get('/api/user', handleGetCurrentUser);
+
+    app.post('/api/auth/signup', async function (req, res) {
+        try {
+            let name = req.body.name;
+            let email = req.body.email;
+            let password = req.body.password;
+            let major = req.body.major;
+
+            if (!name || !email || !password || !major) {
+                return res.status(400).json({ error: 'Name, email, password, and major are all required' });
+            }
+
+            if (!email.endsWith('@drexel.edu')) {
+                return res.status(400).json({ error: 'Email must be a @drexel.edu address' });
+            }
+
+            if (password.length < 6) {
+                return res.status(400).json({ error: 'Password must be at least 6 characters' });
+            }
+
+            let existingUser = await db.getUserByEmail(email);
+            if (existingUser) {
+                return res.status(400).json({ error: 'An account with that email already exists' });
+            }
+
+            let passwordHash = await bcrypt.hash(password, 10);
+
+            let newUser = await db.createUser({
+                name: name,
+                email: email,
+                passwordHash: passwordHash,
+                major: major,
+                classYear: req.body.classYear || 'Freshman',
+                avatarUrl: '/assets/test_profile1.png',
+                bio: '',
+                coop: ''
+            });
+
+            let token = makeToken();
+            tokenStorage[token] = newUser.id;
+
+            let response = await helpers.buildUserResponse(newUser);
+            res.cookie('token', token, cookieOptions).json({ success: true, user: response });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Unable to create account' });
+        }
+    });
 
     app.post('/api/auth/login', async function (req, res) {
         try {
@@ -31,14 +84,16 @@ module.exports = function (app, upload) {
                 return res.status(401).json({ error: 'Invalid Drexel credentials' });
             }
 
-            let match = bcrypt.compareSync(password || '', user.passwordHash);
+            let match = await bcrypt.compare(password || '', user.passwordHash);
             if (!match) {
                 return res.status(401).json({ error: 'Invalid password' });
             }
 
-            req.session.userId = user.id;
+            let token = makeToken();
+            tokenStorage[token] = user.id;
+
             let response = await helpers.buildUserResponse(user);
-            res.json({ success: true, user: response });
+            res.cookie('token', token, cookieOptions).json({ success: true, user: response });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Login failed' });
@@ -50,9 +105,10 @@ module.exports = function (app, upload) {
             let userId = req.body.userId;
             let user = await db.getUserById(userId);
             if (user) {
-                req.session.userId = user.id;
+                let token = makeToken();
+                tokenStorage[token] = user.id;
                 let response = await helpers.buildUserResponse(user);
-                return res.json({ success: true, user: response });
+                return res.cookie('token', token, cookieOptions).json({ success: true, user: response });
             }
             res.status(404).json({ error: 'User not found' });
         } catch (error) {
@@ -62,14 +118,16 @@ module.exports = function (app, upload) {
     });
 
     app.post('/api/auth/logout', function (req, res) {
-        req.session.destroy(function () {
-            res.json({ success: true });
-        });
+        let token = req.cookies.token;
+        if (token !== undefined && tokenStorage.hasOwnProperty(token)) {
+            delete tokenStorage[token];
+        }
+        res.clearCookie('token', cookieOptions).json({ success: true });
     });
 
     app.put('/api/users/profile', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let fields = {
                 name: req.body.name || user.name,
                 major: req.body.major || user.major,

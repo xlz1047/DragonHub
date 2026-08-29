@@ -1,7 +1,7 @@
 let db = require('../database');
 let helpers = require('../helpers');
 
-module.exports = function (app) {
+module.exports = function (app, tokenStorage) {
     app.get('/api/marketplace', async function (req, res) {
         try {
             let items = await db.getMarketplaceItems(req.query.category);
@@ -14,7 +14,7 @@ module.exports = function (app) {
 
     app.post('/api/marketplace', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let title = req.body.title;
             let price = req.body.price;
 

@@ -1,12 +1,16 @@
 let db = require('./database');
 
-async function getCurrentUser(req) {
-    if (req.session && req.session.userId) {
-        let user = await db.getUserById(req.session.userId);
+async function getCurrentUser(req, tokenStorage) {
+    let token = req.cookies.token;
+
+    if (token !== undefined && tokenStorage.hasOwnProperty(token)) {
+        let userId = tokenStorage[token];
+        let user = await db.getUserById(userId);
         if (user) {
             return user;
         }
     }
+
     return await db.getFirstUser();
 }
 

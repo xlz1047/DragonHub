@@ -1,7 +1,7 @@
 let db = require('../database');
 let helpers = require('../helpers');
 
-module.exports = function (app) {
+module.exports = function (app, tokenStorage) {
     app.get('/api/polls', async function (req, res) {
         try {
             let polls = await db.getPolls();
@@ -14,7 +14,7 @@ module.exports = function (app) {
 
     app.post('/api/polls', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let question = req.body.question;
             let options = req.body.options;
 
@@ -47,7 +47,7 @@ module.exports = function (app) {
 
     app.post('/api/polls/:id/vote', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let poll = await db.votePoll(req.params.id, req.body.optionId);
 
             if (!poll) {

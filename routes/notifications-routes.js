@@ -1,10 +1,10 @@
 let db = require('../database');
 let helpers = require('../helpers');
 
-module.exports = function (app) {
+module.exports = function (app, tokenStorage) {
     app.get('/api/notifications', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let notifications = await db.getNotifications(user.id);
             res.json(notifications);
         } catch (error) {
@@ -15,7 +15,7 @@ module.exports = function (app) {
 
     app.post('/api/notifications/read', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             await db.markNotificationsRead(user.id);
             res.json({ success: true });
         } catch (error) {

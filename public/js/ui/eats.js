@@ -45,10 +45,6 @@ function renderVendors() {
     }
 }
 
-function delay(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function buildTruckElement(v, index) {
     let rating = v.rating || 4.8;
     let reviewCount = v.reviewsCount || v.reviewCount || 100;
@@ -69,20 +65,17 @@ function buildTruckElement(v, index) {
     let ratingBadge = document.createElement('span');
     ratingBadge.classList.add('truck-badge');
     ratingBadge.textContent = 'Loading...';
-    let yelpParam = v.yelpId ? `id=${v.yelpId}` : `name=${encodeURIComponent(v.name)}&location=${encodeURIComponent(v.location)}`;
-    delay(500 * index).then(function() {
-    fetch(`/api/yelp?${yelpParam}`)
-    .then(response => response.json())
-    .then(data => {
-        ratingBadge.textContent = '⭐ ' + data.rating + '(' + data.review_count + '+)';
-        if (data.image_url){
-            imgEl.src = data.image_url;
-        }
-    })
-    .catch(() => {
-        ratingBadge.textContent = '⭐ ' + rating + '(' + reviewCount + '+)';
+
+    setTimeout(function () {
+        apiGetYelpData(v.name, v.location).then(function (data) {
+            ratingBadge.textContent = '⭐ ' + data.rating + ' (' + data.review_count + '+)';
+            if (data.image_url) {
+                imgEl.src = data.image_url;
+            }
+        }).catch(function () {
+            ratingBadge.textContent = '⭐ ' + rating + ' (' + reviewCount + '+)';
         });
-    });
+    }, 500 * index);
 
     imgWrapper.append(imgEl);
     imgWrapper.append(ratingBadge);

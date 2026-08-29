@@ -1,7 +1,7 @@
 let db = require('../database');
 let helpers = require('../helpers');
 
-module.exports = function (app) {
+module.exports = function (app, tokenStorage) {
     app.get('/api/posts', async function (req, res) {
         try {
             let posts = await db.getPosts(req.query.category, req.query.search);
@@ -14,7 +14,7 @@ module.exports = function (app) {
 
     app.post('/api/posts', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let content = req.body.content || req.body.title;
 
             if (!content || !content.trim()) {
@@ -54,7 +54,7 @@ module.exports = function (app) {
 
     app.post('/api/posts/:id/comment', async function (req, res) {
         try {
-            let user = await helpers.getCurrentUser(req);
+            let user = await helpers.getCurrentUser(req, tokenStorage);
             let text = req.body.text || req.body.content;
 
             if (!text || !text.trim()) {

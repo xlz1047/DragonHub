@@ -22,6 +22,18 @@ function apiLogin(email, password) {
     });
 }
 
+function apiSignup(signupData) {
+    return fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupData)
+    }).then(function (res) {
+        return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+        });
+    });
+}
+
 function apiSwitchUser(userId) {
     return fetch('/api/auth/switch', {
         method: 'POST',
@@ -117,6 +129,16 @@ function apiGetVendors(cuisine) {
     });
 }
 
+function apiGetYelpData(name, location) {
+    let url = '/api/yelp?name=' + encodeURIComponent(name) + '&location=' + encodeURIComponent(location);
+    return fetch(url).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Yelp data unavailable');
+        }
+        return res.json();
+    });
+}
+
 function apiCheckInVendor(vendorId) {
     return fetch('/api/eats/' + vendorId + '/checkin', {
         method: 'POST'
@@ -169,6 +191,30 @@ function apiCheckInLandmark(landmarkId) {
     }).then(function (res) {
         if (!res.ok) {
             throw new Error('Failed to check in at landmark');
+        }
+        return res.json();
+    });
+}
+
+function apiAddLandmark(landmarkData) {
+    return fetch('/api/landmarks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(landmarkData)
+    }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to save pin');
+        }
+        return res.json();
+    });
+}
+
+function apiDeleteLandmark(landmarkId) {
+    return fetch('/api/landmarks/' + landmarkId, {
+        method: 'DELETE'
+    }).then(function (res) {
+        if (!res.ok) {
+            throw new Error('Failed to delete pin');
         }
         return res.json();
     });

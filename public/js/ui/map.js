@@ -22,14 +22,13 @@ function initLeafletMap() {
         { name: 'Daskalakis Athletic Center', lat: 39.956285875507675, lng: -75.19058541294427, desc: 'Recreation Center & Dragon Arena', type: 'rec' },
         { name: 'LeBow College of Business', lat: 39.95508732929374, lng: -75.18809168154772, desc: 'Home of Finance, Business, and MBA programs', type: 'academic' },
         { name: 'Nesbitt Hall', lat: 39.95590928562843, lng: -75.18901729879538, desc: 'Auditorium dedicated to Public Health and Biology lectures', type: 'academic' },
-        { name: 'Papadakis Integrated Sciences Building', lat: 39.954229361116454, lng: -75.18929325117242, desc: 'Location for Labs and Research Opportunities', type: 'academic' },
-        { name: 'Nanu\'s Hot Chicken', lat: 39.9564, lng: -75.1893, desc: 'Halal Hot Chicken Truck that Features Loaded Fries and Hot Tenders', type: 'food' },
-        { name: 'KC\'s Smoothie Truck', lat: 39.95666515968067, lng: -75.1892863426169, desc: 'Popular Fruit Smoothie Joint on Campus', type: 'food' },
-        { name: 'Kami Food Truck', lat: 39.95554469453332, lng: -75.1895888116436, desc: 'Truck that serves delicious Korean Food', type: 'food' },
-        { name: 'Pete\'s Little Lunch Box', lat: 39.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly Breakfast and Lunch Truck', type: 'food' },
-        { name: 'Korman Center', lat: 39.95478102782406, lng: -75.18875181530149, desc: 'Location that offers a plethora of Studying Services, including Group Study Rooms and Tutoring Services', type: 'study' },
-        { name: 'Rush Building', lat: 39.95680946656349, lng: -75.18940558219164, desc: 'Host study spots and themed-spaces for students to encourage a student-life balance', type: 'study' }
-        
+        { name: 'Papadakis Integrated Sciences Building', lat: 39.954229361116454, lng: -75.18929325117242, desc: 'Location for labs and research opportunities', type: 'academic' },
+        { name: "Nanu's Hot Chicken", lat: 39.9564, lng: -75.1893, desc: 'Halal hot chicken truck featuring loaded fries and hot tenders', type: 'food' },
+        { name: "KC's Smoothie Truck", lat: 39.95666515968067, lng: -75.1892863426169, desc: 'Popular fruit smoothie joint on campus', type: 'food' },
+        { name: 'Kami Food Truck', lat: 39.95554469453332, lng: -75.1895888116436, desc: 'Truck that serves delicious Korean food', type: 'food' },
+        { name: "Pete's Little Lunch Box", lat: 39.958125055589605, lng: -75.18927196165866, desc: 'Budget-friendly breakfast and lunch truck', type: 'food' },
+        { name: 'Korman Center', lat: 39.95478102782406, lng: -75.18875181530149, desc: 'Group study rooms and tutoring services', type: 'study' },
+        { name: 'Rush Building', lat: 39.95680946656349, lng: -75.18940558219164, desc: 'Study spots and themed spaces for student life', type: 'study' }
     ];
 
     mapMarkers = [];
@@ -43,116 +42,113 @@ function initLeafletMap() {
         mapMarkers.push(marker);
     }
 
-    let pendingMarker = null;
-    mapInstance.on('click', function(e) {
-        pendingMarker = e.latlng;
+    bindAddPinFeature();
+    loadUserPins();
+}
+
+let pendingPinLocation = null;
+
+function bindAddPinFeature() {
+    mapInstance.on('click', function (e) {
+        pendingPinLocation = e.latlng;
         openModal('modal-add-marker');
     });
 
-    document.getElementById('modal-add-marker').addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-
-    document.getElementById('add-marker-to').addEventListener('submit', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        let locName = document.getElementById('marker-name').value;
-        let locDesc = document.getElementById('marker-desc').value;
-        if (pendingMarker){
-            fetch('/api/landmarks', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: locName,
-                    description: locDesc,
-                    lat: pendingMarker.lat,
-                    lng: pendingMarker.lng
-                })
-            })
-            .then(data => {
-            let newMarker = window.L.marker([pendingMarker.lat, pendingMarker.lng])
-            .addTo(mapInstance);
-            newMarker.on('click', function(e) {
-            window.L.DomEvent.stopPropagation(e);
-            });
-            let popUpBox = document.createElement('div');
-            let nameEl = document.createElement('strong');
-            nameEl.textContent = locName;
-            let descEl = document.createElement('p');
-            descEl.textContent = locDesc;
-            let deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '🗑️ Delete Pin';
-            deleteBtn.style.color = 'red';
-            deleteBtn.style.cursor = 'pointer';
-            deleteBtn.style.background  = 'none';
-            deleteBtn.style.border = 'none';
-            deleteBtn.addEventListener('click', function(){
-                mapInstance.removeLayer(newMarker);
-                mapMarkers = mapMarkers.filter(function(m){
-                    return m!== newMarker;
-                });
-            });
-            popUpBox.append(nameEl);
-            popUpBox.append(descEl);
-            popUpBox.append(deleteBtn);
-            newMarker.bindPopup(popUpBox);
-            newMarker.categoryType = 'user';
-            mapMarkers.push(newMarker);
-            pendingMarker = null;
-            closeModal('modal-add-marker');
+    let addMarkerForm = document.getElementById('add-marker-form');
+    if (addMarkerForm) {
+        addMarkerForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            handleAddMarkerSubmit();
         });
-            this.reset();
-        }
-    });
-        fetch('/api/landmarks')
-            .then(response => response.json())
-            .then(landmarks =>{
-                landmarks.forEach(function (lm) {
-                    if (lm.category === 'User Pin'){
-                        let marker = window.L.marker([lm.latitude, lm.longitude])
-                        .addTo(mapInstance);
-                        marker.on('click', function(e) {
-                        window.L.DomEvent.stopPropagation(e);
-                        });
-                        let popUpBox = document.createElement('div');
-                        let nameEl = document.createElement('strong');
-                        nameEl.textContent = lm.name;
-                        let descEl = document.createElement('p');
-                        descEl.textContent = lm.description;
-                        let deleteBtn = document.createElement('button');
-                        deleteBtn.textContent = '🗑️ Delete Pin';
-                        deleteBtn.style.color = 'red';
-                        deleteBtn.style.cursor = 'pointer';
-                        deleteBtn.style.background = 'none';
-                        deleteBtn.style.border = 'none';
-                        deleteBtn.addEventListener('click', function() {
-                            fetch('api/landmarks/' + lm.id, {method: 'DELETE'})
-                            .then(()=> {
-                            mapInstance.removeLayer(marker);
-                            mapMarkers = mapMarkers.filter(function (m) {
-                                return m !== marker;
-                            });
-                        });
-                        });
-                            popUpBox.append(nameEl);
-                            popUpBox.append(descEl);
-                            popUpBox.append(deleteBtn);
-                            marker.bindPopup(popUpBox);
-                            marker.categoryType = 'user';
-                            mapMarkers.push(marker);
-                        
-                        };
-                    });
-                });
-    
-
-
-    document.querySelector('[data-close-modal="modal-add-marker"]').addEventListener('click', function(e){
-        e.stopPropagation();
-        pendingMarker = null;
-        closeModal('modal-add-marker');
-    });
     }
+
+    let cancelBtn = document.querySelector('[data-close-modal="modal-add-marker"]');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function () {
+            pendingPinLocation = null;
+        });
+    }
+}
+
+function handleAddMarkerSubmit() {
+    if (!pendingPinLocation) {
+        return;
+    }
+
+    let nameInput = document.getElementById('marker-name');
+    let descInput = document.getElementById('marker-desc');
+    let name = nameInput.value;
+    let description = descInput.value;
+    let lat = pendingPinLocation.lat;
+    let lng = pendingPinLocation.lng;
+
+    apiAddLandmark({
+        name: name,
+        description: description,
+        lat: lat,
+        lng: lng
+    }).then(function (newLandmark) {
+        addUserPinMarker(name, description, lat, lng, newLandmark.id);
+        nameInput.value = '';
+        descInput.value = '';
+        pendingPinLocation = null;
+        closeModal('modal-add-marker');
+    }).catch(function (e) {
+        console.error('Failed to save pin:', e);
+    });
+}
+
+function addUserPinMarker(name, description, lat, lng, landmarkId) {
+    let marker = window.L.marker([lat, lng]).addTo(mapInstance);
+
+    let popupBox = document.createElement('div');
+
+    let nameEl = document.createElement('strong');
+    nameEl.textContent = name;
+
+    let descEl = document.createElement('p');
+    descEl.textContent = description;
+
+    let deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.classList.add('pin-delete-btn');
+    deleteBtn.textContent = 'Delete Pin';
+    deleteBtn.addEventListener('click', function () {
+        deleteUserPin(marker, landmarkId);
+    });
+
+    popupBox.append(nameEl);
+    popupBox.append(descEl);
+    popupBox.append(deleteBtn);
+
+    marker.bindPopup(popupBox);
+    marker.categoryType = 'user';
+    mapMarkers.push(marker);
+}
+
+function deleteUserPin(marker, landmarkId) {
+    apiDeleteLandmark(landmarkId).then(function () {
+        mapInstance.removeLayer(marker);
+        mapMarkers = mapMarkers.filter(function (m) {
+            return m !== marker;
+        });
+    }).catch(function (e) {
+        console.error('Failed to delete pin:', e);
+    });
+}
+
+function loadUserPins() {
+    apiGetLandmarks().then(function (landmarks) {
+        for (let i = 0; i < landmarks.length; i++) {
+            let lm = landmarks[i];
+            if (lm.category === 'User Pin') {
+                addUserPinMarker(lm.name, lm.description, lm.latitude, lm.longitude, lm.id);
+            }
+        }
+    }).catch(function (e) {
+        console.error('Failed to load user pins:', e);
+    });
+}
 
 function filterMapMarkers(type) {
     if (!mapInstance) {

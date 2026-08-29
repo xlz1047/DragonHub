@@ -1,10 +1,7 @@
 let { Pool } = require('pg');
 
 let pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com') 
-    ? { rejectUnauthorized: false } 
-    : false
+    connectionString: process.env.DATABASE_URL
 });
 
 async function getUserById(id) {
@@ -21,6 +18,15 @@ async function getUserByEmail(email) {
         [email]
     );
     return result.rows[0] || null;
+}
+
+async function createUser(newUser) {
+    let id = 'usr_' + Date.now();
+    let result = await pool.query(
+        'INSERT INTO users (id, name, email, password_hash, major, class_year, total_points, streak, avatar_url, bio, coop) VALUES ($1, $2, $3, $4, $5, $6, 0, 1, $7, $8, $9) RETURNING id, email, name, major, class_year AS "classYear", student_id AS "studentId", total_points AS "totalPoints", streak, avatar_url AS "avatarUrl", bio, coop',
+        [id, newUser.name, newUser.email, newUser.passwordHash, newUser.major, newUser.classYear, newUser.avatarUrl, newUser.bio, newUser.coop]
+    );
+    return result.rows[0];
 }
 
 async function getFirstUser() {
@@ -166,12 +172,11 @@ async function getLandmarks() {
     return result.rows;
 }
 
-async function addLandmark(name, description, lat, lng){
+async function addLandmark(name, description, lat, lng) {
     let id = 'user_' + Date.now();
     let result = await pool.query(
-        `INSERT INTO landmarks (id, name, description, address, image_url, latitude, longitude, category, points_reward)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, 'User Pin', 0) RETURNING *`,
-        [id, name, description, 'User Added', '/assets/place.png', lat, lng]
+        'INSERT INTO landmarks (id, name, description, address, image_url, latitude, longitude, category, points_reward) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, name, category, address, description, image_url AS "imageUrl", latitude, longitude, points_reward AS "pointsReward"',
+        [id, name, description, 'User Added', '/assets/place.png', lat, lng, 'User Pin', 0]
     );
     return result.rows[0];
 }
@@ -266,6 +271,7 @@ module.exports = {
     pool: pool,
     getUserById: getUserById,
     getUserByEmail: getUserByEmail,
+    createUser: createUser,
     getFirstUser: getFirstUser,
     getUserBadgeIds: getUserBadgeIds,
     updateUserProfile: updateUserProfile,

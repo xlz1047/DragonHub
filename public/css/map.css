@@ -79,69 +79,12 @@
   padding: 2rem;
 }
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-box{
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: var(--shadow-sm);
-}
-
-.modal-header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--slate-200);
-  padding-bottom: 0.5rem;
-}
-
-.modal-box form label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight:700;
-  margin-bottom: 0.25rem;
-  margin-top: 0.75rem;
-}
-
-.modal-box form input{
-  width:100%;
-  padding: 0.5rem;
-  border: 1px solid var(--slate-300);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-}
-
-.modal-box form button[type="submit"]{
-  margin-top: 1rem;
-  width: 100%;
-  padding: 0.5rem;
-  background: var(--navy, #07294D);
-  color: var(--gold, #FFC600);
-  font-weight: 700;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
+.pin-delete-btn {
+  color: #dc2626;
   cursor: pointer;
-}
-
-.modal-header button{
   background: none;
-  border: 1px solid var(--slate-300);
-  border-radius: var(--radius-md);
-  padding: 0.25rem 0.75rem;
+  border: none;
   font-size: 0.75rem;
-  cursor: pointer;
-  color: var(--slate-600);
+  font-weight: 700;
+  padding: 0.25rem 0;
 }

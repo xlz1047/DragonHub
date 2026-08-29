@@ -8,6 +8,12 @@ function setAuthTab(mode) {
     let subtitle = document.getElementById('auth-subtitle');
     let submitLabel = document.getElementById('auth-submit-label');
     let extraFields = document.getElementById('signup-extra-fields');
+    let emailInput = document.getElementById('auth-email');
+    let passwordInput = document.getElementById('auth-password');
+    let errorEl = document.getElementById('login-error');
+
+    errorEl.classList.add('hidden');
+    errorEl.textContent = '';
 
     if (mode === 'signin') {
         signInBtn.classList.add('active');
@@ -16,6 +22,8 @@ function setAuthTab(mode) {
         subtitle.textContent = 'Sign in with your Drexel credentials or Quick Demo accounts.';
         submitLabel.textContent = 'Sign In to DragonHub';
         extraFields.classList.add('hidden');
+        emailInput.value = 'av942@drexel.edu';
+        passwordInput.value = 'dragon123';
     } else {
         signUpBtn.classList.add('active');
         signInBtn.classList.remove('active');
@@ -23,14 +31,27 @@ function setAuthTab(mode) {
         subtitle.textContent = 'Create your verified Drexel student account.';
         submitLabel.textContent = 'Create Dragon Account';
         extraFields.classList.remove('hidden');
+        emailInput.value = '';
+        passwordInput.value = '';
     }
 }
 
 function handleAuthSubmit(e) {
     e.preventDefault();
+    let errorEl = document.getElementById('login-error');
+    errorEl.classList.add('hidden');
+    errorEl.textContent = '';
+
+    if (currentAuthMode === 'signup') {
+        handleSignupSubmit(errorEl);
+    } else {
+        handleSigninSubmit(errorEl);
+    }
+}
+
+function handleSigninSubmit(errorEl) {
     let email = document.getElementById('auth-email').value;
     let password = document.getElementById('auth-password').value;
-    let errorEl = document.getElementById('login-error');
 
     apiLogin(email, password).then(function (result) {
         if (result.ok) {
@@ -38,6 +59,36 @@ function handleAuthSubmit(e) {
         } else {
             errorEl.classList.remove('hidden');
             errorEl.textContent = result.data.error || 'Invalid Drexel credentials. Please try again.';
+        }
+    }).catch(function (err) {
+        errorEl.classList.remove('hidden');
+        errorEl.textContent = 'Server connection error. Please try again.';
+    });
+}
+
+function handleSignupSubmit(errorEl) {
+    let name = document.getElementById('auth-name').value;
+    let major = document.getElementById('auth-major').value;
+    let email = document.getElementById('auth-email').value;
+    let password = document.getElementById('auth-password').value;
+
+    if (!name.trim() || !major.trim()) {
+        errorEl.classList.remove('hidden');
+        errorEl.textContent = 'Please fill in your name and major.';
+        return;
+    }
+
+    apiSignup({
+        name: name,
+        major: major,
+        email: email,
+        password: password
+    }).then(function (result) {
+        if (result.ok) {
+            window.location.href = '/feed.html';
+        } else {
+            errorEl.classList.remove('hidden');
+            errorEl.textContent = result.data.error || 'Unable to create account. Please try again.';
         }
     }).catch(function (err) {
         errorEl.classList.remove('hidden');
